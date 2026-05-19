@@ -1,0 +1,33 @@
+# Локальное окружение разработки.
+# Поднимает PostgreSQL в контейнере. Само приложение запускается локально
+# через `php artisan serve` и ходит в эту базу по localhost:5432.
+#
+# Команды:
+#   docker compose up -d      — поднять базу в фоне
+#   docker compose down       — остановить
+#   docker compose down -v     — остановить и стереть данные (volume)
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: template_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-template}
+      POSTGRES_USER: ${DB_USERNAME:-template}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    ports:
+      # хост:контейнер — пробрасываем 5432 наружу, чтобы локальный PHP видел базу
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      # именованный volume — данные переживают перезапуск контейнера
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # Laravel/CI ждут, пока база реально готова принимать соединения
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-template} -d ${DB_DATABASE:-template}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
