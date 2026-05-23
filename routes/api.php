@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    // CRUD проектов: index/store/show/update/destroy.
+    Route::apiResource('projects', ProjectController::class);
+
+    // Задачи вложены в проект. shallow(): index/store через /projects/{project}/tasks,
+    // а show/update/destroy через короткий /tasks/{task}.
+    Route::apiResource('projects.tasks', TaskController::class)->shallow();
 });
