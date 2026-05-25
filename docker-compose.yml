@@ -22,6 +22,8 @@ services:
     volumes:
       # именованный volume — данные переживают перезапуск контейнера
       - pgdata:/var/lib/postgresql/data
+      # init-скрипты выполняются один раз при первом создании контейнера
+      - ./docker/postgres/initdb:/docker-entrypoint-initdb.d:ro
     healthcheck:
       # Laravel/CI ждут, пока база реально готова принимать соединения
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-template} -d ${DB_DATABASE:-template}"]

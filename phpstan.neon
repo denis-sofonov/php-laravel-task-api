@@ -1,0 +1,10 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+
+    # Уровень строгости анализа: 0 (мягкий) .. 10 (максимум).
+    # 6 — хороший баланс для рабочего проекта.
+    level: 6
