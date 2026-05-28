@@ -6,22 +6,24 @@ use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
-| Все эти маршруты автоматически получают префикс /api (см. bootstrap/app.php).
+| Базовый префикс /api добавляется автоматически (bootstrap/app.php).
+| Здесь добавляем версию v1 -> итоговые пути вида /api/v1/...
+| Версионирование позволяет менять API, не ломая старых клиентов.
 */
 
-// Публичные маршруты — доступны без токена.
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::prefix('v1')->group(function () {
+    // Публичные маршруты со строгим лимитом (защита от перебора паролей).
+    Route::middleware('throttle:auth')->group(function () {
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/login', [AuthController::class, 'login']);
+    });
 
-// Защищённые маршруты — требуют валидный Bearer-токен Sanctum.
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [AuthController::class, 'me']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+    // Защищённые маршруты: валидный токен + общий лимит частоты.
+    Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+        Route::get('/user', [AuthController::class, 'me']);
+        Route::post('/logout', [AuthController::class, 'logout']);
 
-    // CRUD проектов: index/store/show/update/destroy.
-    Route::apiResource('projects', ProjectController::class);
-
-    // Задачи вложены в проект. shallow(): index/store через /projects/{project}/tasks,
-    // а show/update/destroy через короткий /tasks/{task}.
-    Route::apiResource('projects.tasks', TaskController::class)->shallow();
+        Route::apiResource('projects', ProjectController::class);
+        Route::apiResource('projects.tasks', TaskController::class)->shallow();
+    });
 });

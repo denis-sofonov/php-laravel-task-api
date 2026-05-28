@@ -4,7 +4,7 @@ use App\Models\Project;
 use App\Models\User;
 
 it('requires authentication', function () {
-    $this->getJson('/api/projects')->assertUnauthorized();
+    $this->getJson('/api/v1/projects')->assertUnauthorized();
 });
 
 it('lists only the projects of the authenticated user', function () {
@@ -13,7 +13,7 @@ it('lists only the projects of the authenticated user', function () {
     Project::factory(3)->create(); // чужие проекты не должны попасть в выдачу
 
     $this->actingAs($user, 'sanctum')
-        ->getJson('/api/projects')
+        ->getJson('/api/v1/projects')
         ->assertOk()
         ->assertJsonCount(2, 'data')
         ->assertJsonPath('meta.total', 2);
@@ -23,7 +23,7 @@ it('creates a project owned by the authenticated user', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user, 'sanctum')
-        ->postJson('/api/projects', ['name' => 'New Project', 'description' => 'Desc'])
+        ->postJson('/api/v1/projects', ['name' => 'New Project', 'description' => 'Desc'])
         ->assertCreated()
         ->assertJsonPath('data.name', 'New Project');
 
@@ -37,7 +37,7 @@ it('validates project creation', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user, 'sanctum')
-        ->postJson('/api/projects', [])
+        ->postJson('/api/v1/projects', [])
         ->assertStatus(422)
         ->assertJsonValidationErrors('name');
 });
@@ -47,7 +47,7 @@ it('shows a project to its owner', function () {
     $project = Project::factory()->for($user)->create();
 
     $this->actingAs($user, 'sanctum')
-        ->getJson("/api/projects/{$project->id}")
+        ->getJson("/api/v1/projects/{$project->id}")
         ->assertOk()
         ->assertJsonPath('data.id', $project->id);
 });
@@ -57,7 +57,7 @@ it('updates a project', function () {
     $project = Project::factory()->for($user)->create(['name' => 'Old']);
 
     $this->actingAs($user, 'sanctum')
-        ->patchJson("/api/projects/{$project->id}", ['name' => 'Updated'])
+        ->patchJson("/api/v1/projects/{$project->id}", ['name' => 'Updated'])
         ->assertOk()
         ->assertJsonPath('data.name', 'Updated');
 
@@ -69,7 +69,7 @@ it('deletes a project', function () {
     $project = Project::factory()->for($user)->create();
 
     $this->actingAs($user, 'sanctum')
-        ->deleteJson("/api/projects/{$project->id}")
+        ->deleteJson("/api/v1/projects/{$project->id}")
         ->assertNoContent();
 
     $this->assertDatabaseMissing('projects', ['id' => $project->id]);
@@ -80,10 +80,10 @@ it('forbids access to a project owned by another user', function () {
     $intruder = User::factory()->create();
 
     $this->actingAs($intruder, 'sanctum')
-        ->getJson("/api/projects/{$project->id}")
+        ->getJson("/api/v1/projects/{$project->id}")
         ->assertForbidden();
 
     $this->actingAs($intruder, 'sanctum')
-        ->deleteJson("/api/projects/{$project->id}")
+        ->deleteJson("/api/v1/projects/{$project->id}")
         ->assertForbidden();
 });

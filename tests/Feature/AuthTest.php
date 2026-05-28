@@ -3,7 +3,7 @@
 use App\Models\User;
 
 it('registers a new user and returns a token', function () {
-    $response = $this->postJson('/api/register', [
+    $response = $this->postJson('/api/v1/register', [
         'name' => 'Alice',
         'email' => 'alice@example.com',
         'password' => 'Password123!',
@@ -20,7 +20,7 @@ it('registers a new user and returns a token', function () {
 });
 
 it('rejects registration with invalid data', function () {
-    $this->postJson('/api/register', [])
+    $this->postJson('/api/v1/register', [])
         ->assertStatus(422)
         ->assertJsonValidationErrors(['name', 'email', 'password']);
 });
@@ -28,7 +28,7 @@ it('rejects registration with invalid data', function () {
 it('rejects registration with a duplicate email', function () {
     User::factory()->create(['email' => 'taken@example.com']);
 
-    $this->postJson('/api/register', [
+    $this->postJson('/api/v1/register', [
         'name' => 'Bob',
         'email' => 'taken@example.com',
         'password' => 'Password123!',
@@ -39,7 +39,7 @@ it('rejects registration with a duplicate email', function () {
 it('logs in with valid credentials', function () {
     $user = User::factory()->create(['password' => 'Password123!']);
 
-    $this->postJson('/api/login', [
+    $this->postJson('/api/v1/login', [
         'email' => $user->email,
         'password' => 'Password123!',
     ])->assertOk()->assertJsonStructure(['user', 'token']);
@@ -48,7 +48,7 @@ it('logs in with valid credentials', function () {
 it('rejects login with a wrong password', function () {
     $user = User::factory()->create(['password' => 'Password123!']);
 
-    $this->postJson('/api/login', [
+    $this->postJson('/api/v1/login', [
         'email' => $user->email,
         'password' => 'wrong-password',
     ])->assertStatus(422)->assertJsonValidationErrors('email');
@@ -58,25 +58,25 @@ it('returns the authenticated user', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user, 'sanctum')
-        ->getJson('/api/user')
+        ->getJson('/api/v1/user')
         ->assertOk()
         ->assertJsonPath('data.email', $user->email);
 });
 
 it('blocks the profile endpoint without a token', function () {
-    $this->getJson('/api/user')->assertUnauthorized();
+    $this->getJson('/api/v1/user')->assertUnauthorized();
 });
 
 it('revokes the token on logout', function () {
     $user = User::factory()->create(['password' => 'Password123!']);
 
-    $token = $this->postJson('/api/login', [
+    $token = $this->postJson('/api/v1/login', [
         'email' => $user->email,
         'password' => 'Password123!',
     ])->json('token');
 
     // С действующим токеном logout проходит.
-    $this->withToken($token)->postJson('/api/logout')->assertOk();
+    $this->withToken($token)->postJson('/api/v1/logout')->assertOk();
 
     // Токен физически удалён из базы.
     expect($user->tokens()->count())->toBe(0);
@@ -86,5 +86,5 @@ it('revokes the token on logout', function () {
     $this->app['auth']->forgetGuards();
 
     // Тот же токен после logout уже не работает.
-    $this->withToken($token)->getJson('/api/user')->assertUnauthorized();
+    $this->withToken($token)->getJson('/api/v1/user')->assertUnauthorized();
 });

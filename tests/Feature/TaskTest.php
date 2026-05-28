@@ -11,7 +11,7 @@ it('lists tasks of a project', function () {
     Task::factory(3)->for($project)->create();
 
     $this->actingAs($user, 'sanctum')
-        ->getJson("/api/projects/{$project->id}/tasks")
+        ->getJson("/api/v1/projects/{$project->id}/tasks")
         ->assertOk()
         ->assertJsonCount(3, 'data');
 });
@@ -21,7 +21,7 @@ it('creates a task inside a project', function () {
     $project = Project::factory()->for($user)->create();
 
     $this->actingAs($user, 'sanctum')
-        ->postJson("/api/projects/{$project->id}/tasks", [
+        ->postJson("/api/v1/projects/{$project->id}/tasks", [
             'title' => 'Write tests',
             'status' => TaskStatus::InProgress->value,
             'due_date' => '2026-07-01',
@@ -41,7 +41,7 @@ it('defaults the status to todo when not provided', function () {
     $project = Project::factory()->for($user)->create();
 
     $this->actingAs($user, 'sanctum')
-        ->postJson("/api/projects/{$project->id}/tasks", ['title' => 'No status'])
+        ->postJson("/api/v1/projects/{$project->id}/tasks", ['title' => 'No status'])
         ->assertCreated()
         ->assertJsonPath('data.status', 'todo');
 });
@@ -51,7 +51,7 @@ it('rejects an invalid status', function () {
     $project = Project::factory()->for($user)->create();
 
     $this->actingAs($user, 'sanctum')
-        ->postJson("/api/projects/{$project->id}/tasks", [
+        ->postJson("/api/v1/projects/{$project->id}/tasks", [
             'title' => 'Bad status',
             'status' => 'nonsense',
         ])
@@ -65,7 +65,7 @@ it('updates a task', function () {
     $task = Task::factory()->for($project)->create(['status' => TaskStatus::Todo]);
 
     $this->actingAs($user, 'sanctum')
-        ->patchJson("/api/tasks/{$task->id}", ['status' => TaskStatus::Done->value])
+        ->patchJson("/api/v1/tasks/{$task->id}", ['status' => TaskStatus::Done->value])
         ->assertOk()
         ->assertJsonPath('data.status', 'done');
 });
@@ -76,7 +76,7 @@ it('deletes a task', function () {
     $task = Task::factory()->for($project)->create();
 
     $this->actingAs($user, 'sanctum')
-        ->deleteJson("/api/tasks/{$task->id}")
+        ->deleteJson("/api/v1/tasks/{$task->id}")
         ->assertNoContent();
 
     $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
@@ -87,7 +87,7 @@ it('forbids creating a task in a project owned by another user', function () {
     $intruder = User::factory()->create();
 
     $this->actingAs($intruder, 'sanctum')
-        ->postJson("/api/projects/{$project->id}/tasks", ['title' => 'hack'])
+        ->postJson("/api/v1/projects/{$project->id}/tasks", ['title' => 'hack'])
         ->assertForbidden();
 });
 
@@ -96,6 +96,6 @@ it('forbids touching a task owned by another user', function () {
     $intruder = User::factory()->create();
 
     $this->actingAs($intruder, 'sanctum')
-        ->getJson("/api/tasks/{$task->id}")
+        ->getJson("/api/v1/tasks/{$task->id}")
         ->assertForbidden();
 });

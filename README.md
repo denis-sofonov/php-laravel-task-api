@@ -53,7 +53,7 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-The API is now available at `http://127.0.0.1:8000/api`.
+The API is now available at `http://127.0.0.1:8000/api/v1`.
 
 A demo user is seeded for manual testing:
 
@@ -64,8 +64,9 @@ password: password
 
 ## API reference
 
-All routes are prefixed with `/api`. Protected routes require the header
-`Authorization: Bearer <token>`.
+All routes are prefixed with `/api/v1`. Protected routes require the header
+`Authorization: Bearer <token>`. Auth endpoints are rate-limited (5/min);
+other endpoints are limited to 60 requests/min per user.
 
 ### Authentication
 
@@ -100,13 +101,13 @@ All routes are prefixed with `/api`. Protected routes require the header
 
 ```bash
 # Register and capture the token
-TOKEN=$(curl -s -X POST http://127.0.0.1:8000/api/register \
+TOKEN=$(curl -s -X POST http://127.0.0.1:8000/api/v1/register \
   -H "Accept: application/json" -H "Content-Type: application/json" \
   -d '{"name":"Alice","email":"alice@example.com","password":"Password123!","password_confirmation":"Password123!"}' \
   | php -r 'echo json_decode(file_get_contents("php://stdin"))->token;')
 
 # Create a project
-curl -X POST http://127.0.0.1:8000/api/projects \
+curl -X POST http://127.0.0.1:8000/api/v1/projects \
   -H "Authorization: Bearer $TOKEN" \
   -H "Accept: application/json" -H "Content-Type: application/json" \
   -d '{"name":"My first project"}'
