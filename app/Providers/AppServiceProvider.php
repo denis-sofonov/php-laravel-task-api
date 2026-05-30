@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +25,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureRateLimiting();
+
+        // Ссылка в письме сброса пароля ведёт на фронтенд (SPA), а не на бэкенд.
+        ResetPassword::createUrlUsing(function (CanResetPassword $notifiable, string $token) {
+            $base = rtrim((string) config('app.frontend_url', config('app.url')), '/');
+
+            return $base.'/password-reset?token='.$token.'&email='.urlencode($notifiable->getEmailForPasswordReset());
+        });
     }
 
     /**

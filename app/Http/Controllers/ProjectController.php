@@ -18,11 +18,28 @@ class ProjectController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $projects = $request->user()
+        $filters = $request->validate([
+            'search' => ['sometimes', 'string', 'max:255'],
+            'sort' => ['sometimes', 'string', 'max:50'],
+        ]);
+
+        $query = $request->user()
             ->projects()
-            ->withCount('tasks')   // tasks_count без загрузки всех задач (нет N+1)
-            ->latest()
-            ->paginate(15);
+            ->withCount('tasks'); // tasks_count без загрузки всех задач (нет N+1)
+
+        if (isset($filters['search'])) {
+            $query->where('name', 'ilike', '%'.$filters['search'].'%');
+        }
+
+        $sort = $filters['sort'] ?? '-created_at';
+        $column = ltrim($sort, '-');
+        if (in_array($column, ['created_at', 'name'], true)) {
+            $query->orderBy($column, str_starts_with($sort, '-') ? 'desc' : 'asc');
+        } else {
+            $query->latest();
+        }
+
+        $projects = $query->paginate(15)->withQueryString();
 
         return ProjectResource::collection($projects);
     }

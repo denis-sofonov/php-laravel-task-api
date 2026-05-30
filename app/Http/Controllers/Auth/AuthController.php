@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,9 @@ class AuthController extends Controller
         // validated() возвращает только прошедшие валидацию поля — безопаснее,
         // чем брать весь $request. Пароль захешируется автоматически (cast 'hashed').
         $user = User::create($request->validated());
+
+        // Отправляем письмо с ссылкой подтверждения email (через лог-мейлер в dev).
+        event(new Registered($user));
 
         $token = $user->createToken($this->tokenName($request))->plainTextToken;
 

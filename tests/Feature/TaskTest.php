@@ -99,3 +99,49 @@ it('forbids touching a task owned by another user', function () {
         ->getJson("/api/v1/tasks/{$task->id}")
         ->assertForbidden();
 });
+
+it('filters tasks by status', function () {
+    $user = User::factory()->create();
+    $project = Project::factory()->for($user)->create();
+    Task::factory(2)->for($project)->create(['status' => TaskStatus::Done]);
+    Task::factory(3)->for($project)->create(['status' => TaskStatus::Todo]);
+
+    $this->actingAs($user, 'sanctum')
+        ->getJson("/api/v1/projects/{$project->id}/tasks?status=done")
+        ->assertOk()
+        ->assertJsonCount(2, 'data');
+});
+
+it('searches tasks by title', function () {
+    $user = User::factory()->create();
+    $project = Project::factory()->for($user)->create();
+    Task::factory()->for($project)->create(['title' => 'Buy milk']);
+    Task::factory()->for($project)->create(['title' => 'Write report']);
+
+    $this->actingAs($user, 'sanctum')
+        ->getJson("/api/v1/projects/{$project->id}/tasks?search=milk")
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.title', 'Buy milk');
+});
+
+it('sorts tasks by title ascending', function () {
+    $user = User::factory()->create();
+    $project = Project::factory()->for($user)->create();
+    Task::factory()->for($project)->create(['title' => 'Bravo']);
+    Task::factory()->for($project)->create(['title' => 'Alpha']);
+
+    $this->actingAs($user, 'sanctum')
+        ->getJson("/api/v1/projects/{$project->id}/tasks?sort=title")
+        ->assertOk()
+        ->assertJsonPath('data.0.title', 'Alpha');
+});
+
+it('rejects an invalid status filter', function () {
+    $user = User::factory()->create();
+    $project = Project::factory()->for($user)->create();
+
+    $this->actingAs($user, 'sanctum')
+        ->getJson("/api/v1/projects/{$project->id}/tasks?status=bogus")
+        ->assertStatus(422);
+});

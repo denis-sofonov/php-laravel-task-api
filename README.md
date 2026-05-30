@@ -72,10 +72,14 @@ other endpoints are limited to 60 requests/min per user.
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| POST | `/register` | – | Create a user, returns user + token |
+| POST | `/register` | – | Create a user, returns user + token, sends verification email |
 | POST | `/login` | – | Authenticate, returns user + token |
 | GET | `/user` | ✅ | Current authenticated user |
 | POST | `/logout` | ✅ | Revoke the current token |
+| POST | `/forgot-password` | – | Send a password reset link |
+| POST | `/reset-password` | – | Set a new password using the token |
+| GET | `/email/verify/{id}/{hash}` | – (signed) | Verify email via the signed link |
+| POST | `/email/verification-notification` | ✅ | Resend the verification email |
 
 ### Projects
 
@@ -96,6 +100,14 @@ other endpoints are limited to 60 requests/min per user.
 | GET | `/tasks/{task}` | Show a task |
 | PATCH | `/tasks/{task}` | Update a task |
 | DELETE | `/tasks/{task}` | Delete a task |
+
+**List query parameters** (projects & tasks):
+
+- `search` — case-insensitive substring match (project `name` / task `title`).
+- `status` — tasks only: `todo` / `in_progress` / `done`.
+- `sort` — whitelisted fields, prefix with `-` for descending.
+  Tasks: `created_at`, `due_date`, `title`, `status`. Projects: `created_at`, `name`.
+  Example: `GET /api/v1/projects/1/tasks?status=todo&sort=-due_date`.
 
 ### Example
 
