@@ -3,7 +3,9 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
+    // Health check для балансировщиков и k8s — публичный, без лимита.
+    Route::get('/health', [HealthController::class, 'show']);
+
     // Публичные маршруты со строгим лимитом (защита от перебора паролей).
     Route::middleware('throttle:auth')->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
@@ -31,6 +36,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
         Route::get('/user', [AuthController::class, 'me']);
         Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/stats', [StatsController::class, 'show']);
 
         // Повторная отправка письма подтверждения.
         Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])

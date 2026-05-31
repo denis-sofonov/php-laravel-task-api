@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
+use App\Jobs\LogProjectActivity;
 use App\Models\Project;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -51,6 +52,9 @@ class ProjectController extends Controller
     {
         // create() через связь сам проставит user_id.
         $project = $request->user()->projects()->create($request->validated());
+
+        // Фоновая задача: уходит в очередь, не задерживает HTTP-ответ.
+        dispatch(LogProjectActivity::created($project));
 
         return ProjectResource::make($project)
             ->response()

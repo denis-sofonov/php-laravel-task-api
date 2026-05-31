@@ -125,6 +125,32 @@ curl -X POST http://127.0.0.1:8000/api/v1/projects \
   -d '{"name":"My first project"}'
 ```
 
+### System
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/health` | – | Liveness probe (checks DB), 200 or 503 |
+| GET | `/stats` | ✅ | Per-user counts, cached for 60s |
+
+## Operations
+
+**Queues.** Heavy work is pushed to a queue instead of blocking the request
+(e.g. `LogProjectActivity` on project creation). Run a worker with:
+
+```bash
+php artisan queue:work
+```
+
+The queue connection is `database` by default (`QUEUE_CONNECTION` in `.env`).
+
+**Structured logging.** A `structured` JSON log channel
+(`storage/logs/structured.log`) is ready for ingestion by ELK / Loki / Datadog.
+Use it via `Log::channel('structured')->info(...)`.
+
+**Error monitoring (Sentry).** Not bundled to avoid an unused dependency.
+To enable it: `composer require sentry/sentry-laravel`, then publish the config
+and set `SENTRY_LARAVEL_DSN` in `.env`.
+
 ## Quality checks
 
 ```bash
