@@ -55,6 +55,16 @@ php artisan serve
 
 The API is now available at `http://127.0.0.1:8000/api/v1`.
 
+### Run the whole stack in Docker
+
+Instead of `artisan serve`, you can run PHP-FPM + Nginx + PostgreSQL together:
+
+```bash
+docker compose up -d --build                       # build & start app, web, postgres
+docker compose exec app php artisan migrate --seed # set up the database
+# API: http://localhost:8080/api/v1
+```
+
 A demo user is seeded for manual testing:
 
 ```

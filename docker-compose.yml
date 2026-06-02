@@ -1,11 +1,14 @@
-# Локальное окружение разработки.
-# Поднимает PostgreSQL в контейнере. Само приложение запускается локально
-# через `php artisan serve` и ходит в эту базу по localhost:5432.
+# Окружение в Docker.
 #
-# Команды:
-#   docker compose up -d      — поднять базу в фоне
-#   docker compose down       — остановить
-#   docker compose down -v     — остановить и стереть данные (volume)
+# Два сценария:
+#   1) Только база (локальная разработка через `php artisan serve`):
+#        docker compose up -d postgres
+#   2) Весь стек в контейнерах (php-fpm + nginx + postgres):
+#        docker compose up -d --build
+#        API: http://localhost:8080/api/v1
+#        миграции: docker compose exec app php artisan migrate --seed
+#
+# Остановить: docker compose down   (с очисткой данных: docker compose down -v)
 
 services:
   postgres:
@@ -30,6 +33,35 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  # PHP-FPM с кодом приложения (production-подобный образ).
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: template_app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Внутри сети compose база доступна по имени сервиса на стандартном порту.
+      DB_HOST: postgres
+      DB_PORT: 5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Nginx — точка входа, проксирует PHP в контейнер app.
+  web:
+    image: nginx:alpine
+    container_name: template_web
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 
 volumes:
   pgdata:
