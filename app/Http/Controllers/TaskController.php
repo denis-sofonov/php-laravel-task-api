@@ -14,11 +14,26 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
+/**
+ * @group Tasks
+ *
+ * Задачи внутри проектов.
+ *
+ * @authenticated
+ */
 class TaskController extends Controller
 {
     /**
      * Список задач конкретного проекта.
      * $project приходит из вложенного маршрута projects/{project}/tasks.
+     *
+     * @queryParam status string Фильтр по статусу: todo, in_progress, done. Example: todo
+     * @queryParam search string Поиск по названию. Example: deploy
+     * @queryParam sort string Поля: created_at, due_date, title, status (префикс - для убывания). Example: -due_date
+     *
+     * @apiResourceCollection App\Http\Resources\TaskResource
+     *
+     * @apiResourceModel App\Models\Task paginate=15
      */
     public function index(Request $request, Project $project): AnonymousResourceCollection
     {
@@ -59,6 +74,10 @@ class TaskController extends Controller
 
     /**
      * Создать задачу внутри проекта.
+     *
+     * @apiResource App\Http\Resources\TaskResource
+     *
+     * @apiResourceModel App\Models\Task
      */
     public function store(StoreTaskRequest $request, Project $project): JsonResponse
     {
@@ -74,6 +93,10 @@ class TaskController extends Controller
 
     /**
      * Показать одну задачу (shallow-маршрут tasks/{task}).
+     *
+     * @apiResource App\Http\Resources\TaskResource
+     *
+     * @apiResourceModel App\Models\Task
      */
     public function show(Task $task): TaskResource
     {
@@ -84,6 +107,10 @@ class TaskController extends Controller
 
     /**
      * Обновить задачу.
+     *
+     * @apiResource App\Http\Resources\TaskResource
+     *
+     * @apiResourceModel App\Models\Task
      */
     public function update(UpdateTaskRequest $request, Task $task): TaskResource
     {
@@ -96,6 +123,8 @@ class TaskController extends Controller
 
     /**
      * Удалить задачу.
+     *
+     * @response 204 scenario="Deleted"
      */
     public function destroy(Task $task): Response
     {

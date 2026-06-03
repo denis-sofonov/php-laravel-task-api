@@ -7,10 +7,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * @group System
+ *
+ * @authenticated
+ */
 class StatsController extends Controller
 {
     /**
-     * Сводка по данным пользователя.
+     * Сводка по данным пользователя (кешируется на 60 секунд).
+     *
      * Результат кешируется на 60 секунд (Cache::remember): первый запрос
      * считает агрегаты, последующие в течение TTL берут готовое из кеша.
      * Допускается небольшая неактуальность данных — обычный приём для дашбордов.

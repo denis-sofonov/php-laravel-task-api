@@ -12,10 +12,24 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
+/**
+ * @group Projects
+ *
+ * Управление проектами текущего пользователя.
+ *
+ * @authenticated
+ */
 class ProjectController extends Controller
 {
     /**
      * Список проектов текущего пользователя (с пагинацией).
+     *
+     * @queryParam search string Поиск по названию. Example: redesign
+     * @queryParam sort string Сортировка: created_at или name, с префиксом - для убывания. Example: -created_at
+     *
+     * @apiResourceCollection App\Http\Resources\ProjectResource
+     *
+     * @apiResourceModel App\Models\Project paginate=15
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -47,6 +61,10 @@ class ProjectController extends Controller
 
     /**
      * Создать проект для текущего пользователя.
+     *
+     * @apiResource App\Http\Resources\ProjectResource
+     *
+     * @apiResourceModel App\Models\Project
      */
     public function store(StoreProjectRequest $request): JsonResponse
     {
@@ -63,6 +81,10 @@ class ProjectController extends Controller
 
     /**
      * Показать один проект.
+     *
+     * @apiResource App\Http\Resources\ProjectResource
+     *
+     * @apiResourceModel App\Models\Project
      */
     public function show(Project $project): ProjectResource
     {
@@ -73,6 +95,10 @@ class ProjectController extends Controller
 
     /**
      * Обновить проект.
+     *
+     * @apiResource App\Http\Resources\ProjectResource
+     *
+     * @apiResourceModel App\Models\Project
      */
     public function update(UpdateProjectRequest $request, Project $project): ProjectResource
     {
@@ -85,6 +111,8 @@ class ProjectController extends Controller
 
     /**
      * Удалить проект (вместе с задачами — каскадом из миграции).
+     *
+     * @response 204 scenario="Deleted"
      */
     public function destroy(Project $project): Response
     {

@@ -1,0 +1,1264 @@
+openapi: 3.0.3
+info:
+  title: 'Backend Template API Documentation'
+  description: 'Token-authenticated REST API for managing projects and tasks.'
+  version: 1.0.0
+servers:
+  - url: 'http://localhost'
+tags:
+  - name: Endpoints
+    description: ''
+  - name: Projects
+    description: "\nУправление проектами текущего пользователя."
+  - name: System
+    description: ''
+  - name: Tasks
+    description: "\nЗадачи внутри проектов."
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: 'Obtain a token from <code>POST /api/v1/login</code> or <code>POST /api/v1/register</code>, then send it as <code>Authorization: Bearer {token}</code>.'
+security:
+  -
+    default: []
+paths:
+  /api/v1/health:
+    get:
+      summary: 'Проверка живости сервиса для load balancer / k8s probes.'
+      operationId: LoadBalancerK8sProbes
+      description: 'Возвращает 200, если БД доступна, иначе 503.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: ok
+                  services:
+                    database: ok
+                  timestamp: '2026-06-06T20:34:45+00:00'
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  services:
+                    type: object
+                    properties:
+                      database:
+                        type: string
+                        example: ok
+                  timestamp:
+                    type: string
+                    example: '2026-06-06T20:34:45+00:00'
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/register:
+    post:
+      summary: 'Регистрация нового пользователя и выдача токена.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The password field confirmation does not match. (and 1 more error)'
+                  errors:
+                    password:
+                      - 'The password field confirmation does not match.'
+                      - 'The password field must be at least 8 characters.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The password field confirmation does not match. (and 1 more error)'
+                  errors:
+                    type: object
+                    properties:
+                      password:
+                        type: array
+                        example:
+                          - 'The password field confirmation does not match.'
+                          - 'The password field must be at least 8 characters.'
+                        items:
+                          type: string
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                email:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 255 characters.'
+                  example: zbailey@example.net
+                password:
+                  type: string
+                  description: ''
+                  example: '|]|{+-'
+              required:
+                - name
+                - email
+                - password
+      security: []
+  /api/v1/login:
+    post:
+      summary: 'Вход: проверяем учётные данные и выдаём новый токен.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'These credentials do not match our records.'
+                  errors:
+                    email:
+                      - 'These credentials do not match our records.'
+                properties:
+                  message:
+                    type: string
+                    example: 'These credentials do not match our records.'
+                  errors:
+                    type: object
+                    properties:
+                      email:
+                        type: array
+                        example:
+                          - 'These credentials do not match our records.'
+                        items:
+                          type: string
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: gbailey@example.net
+                password:
+                  type: string
+                  description: ''
+                  example: '|]|{+-'
+                device_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: v
+              required:
+                - email
+                - password
+      security: []
+  /api/v1/forgot-password:
+    post:
+      summary: 'Шаг 1: запросить ссылку для сброса пароля.'
+      operationId: '1'
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'If the email exists, a reset link has been sent.'
+                properties:
+                  message:
+                    type: string
+                    example: 'If the email exists, a reset link has been sent.'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: gbailey@example.net
+              required:
+                - email
+      security: []
+  /api/v1/reset-password:
+    post:
+      summary: 'Шаг 2: установить новый пароль по токену из письма.'
+      operationId: '2'
+      description: ''
+      parameters: []
+      responses:
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The password field confirmation does not match. (and 1 more error)'
+                  errors:
+                    password:
+                      - 'The password field confirmation does not match.'
+                      - 'The password field must be at least 8 characters.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The password field confirmation does not match. (and 1 more error)'
+                  errors:
+                    type: object
+                    properties:
+                      password:
+                        type: array
+                        example:
+                          - 'The password field confirmation does not match.'
+                          - 'The password field must be at least 8 characters.'
+                        items:
+                          type: string
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: ''
+                  example: architecto
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: zbailey@example.net
+                password:
+                  type: string
+                  description: ''
+                  example: '|]|{+-'
+              required:
+                - token
+                - email
+                - password
+      security: []
+  '/api/v1/email/verify/{id}/{hash}':
+    get:
+      summary: 'Подтверждение email по подписанной ссылке из письма.'
+      operationId: Email
+      description: "Ссылка содержит id пользователя и hash (sha1 от email) — auth не требуется,\nподлинность гарантирует подпись маршрута (middleware 'signed')."
+      parameters: []
+      responses:
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid signature.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid signature.'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the verify.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: hash
+        description: ''
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/v1/user:
+    get:
+      summary: 'Текущий авторизованный пользователь (по токену).'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/logout:
+    post:
+      summary: 'Выход: отзываем только тот токен, которым сделан текущий запрос.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/email/verification-notification:
+    post:
+      summary: 'Повторная отправка письма подтверждения (для авторизованного пользователя).'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/projects:
+    get:
+      summary: 'Список проектов текущего пользователя (с пагинацией).'
+      operationId: ''
+      description: ''
+      parameters:
+        -
+          in: query
+          name: search
+          description: 'Поиск по названию.'
+          example: redesign
+          required: false
+          schema:
+            type: string
+            description: 'Поиск по названию.'
+            example: redesign
+        -
+          in: query
+          name: sort
+          description: 'Сортировка: created_at или name, с префиксом - для убывания.'
+          example: '-created_at'
+          required: false
+          schema:
+            type: string
+            description: 'Сортировка: created_at или name, с префиксом - для убывания.'
+            example: '-created_at'
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 14
+                      name: 'Business-focused intangible internetsolution'
+                      description: null
+                      created_at: '2026-06-06T20:34:46.000000Z'
+                      updated_at: '2026-06-06T20:34:46.000000Z'
+                    -
+                      id: 15
+                      name: 'Versatile clear-thinking database'
+                      description: null
+                      created_at: '2026-06-06T20:34:46.000000Z'
+                      updated_at: '2026-06-06T20:34:46.000000Z'
+                  links:
+                    first: '/?page=1'
+                    last: '/?page=1'
+                    prev: null
+                    next: null
+                  meta:
+                    current_page: 1
+                    from: 1
+                    last_page: 1
+                    links:
+                      -
+                        url: null
+                        label: '&laquo; Previous'
+                        page: null
+                        active: false
+                      -
+                        url: '/?page=1'
+                        label: '1'
+                        page: 1
+                        active: true
+                      -
+                        url: null
+                        label: 'Next &raquo;'
+                        page: null
+                        active: false
+                    path: /
+                    per_page: 15
+                    to: 2
+                    total: 2
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - id: 14
+                        name: 'Business-focused intangible internetsolution'
+                        description: null
+                        created_at: '2026-06-06T20:34:46.000000Z'
+                        updated_at: '2026-06-06T20:34:46.000000Z'
+                      - id: 15
+                        name: 'Versatile clear-thinking database'
+                        description: null
+                        created_at: '2026-06-06T20:34:46.000000Z'
+                        updated_at: '2026-06-06T20:34:46.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 14
+                        name:
+                          type: string
+                          example: 'Business-focused intangible internetsolution'
+                        description:
+                          type: string
+                          example: null
+                          nullable: true
+                        created_at:
+                          type: string
+                          example: '2026-06-06T20:34:46.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2026-06-06T20:34:46.000000Z'
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: '/?page=1'
+                      last:
+                        type: string
+                        example: '/?page=1'
+                      prev:
+                        type: string
+                        example: null
+                        nullable: true
+                      next:
+                        type: string
+                        example: null
+                        nullable: true
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      from:
+                        type: integer
+                        example: 1
+                      last_page:
+                        type: integer
+                        example: 1
+                      links:
+                        type: array
+                        example:
+                          - url: null
+                            label: '&laquo; Previous'
+                            page: null
+                            active: false
+                          - url: '/?page=1'
+                            label: '1'
+                            page: 1
+                            active: true
+                          - url: null
+                            label: 'Next &raquo;'
+                            page: null
+                            active: false
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              example: null
+                              nullable: true
+                            label:
+                              type: string
+                              example: '&laquo; Previous'
+                            page:
+                              type: string
+                              example: null
+                              nullable: true
+                            active:
+                              type: boolean
+                              example: false
+                      path:
+                        type: string
+                        example: /
+                      per_page:
+                        type: integer
+                        example: 15
+                      to:
+                        type: integer
+                        example: 2
+                      total:
+                        type: integer
+                        example: 2
+      tags:
+        - Projects
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                search:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                sort:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: 'n'
+    post:
+      summary: 'Создать проект для текущего пользователя.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 16
+                    name: 'Reverse-engineered fault-tolerant success'
+                    description: 'Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.'
+                    created_at: '2026-06-06T20:34:46.000000Z'
+                    updated_at: '2026-06-06T20:34:46.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 16
+                      name:
+                        type: string
+                        example: 'Reverse-engineered fault-tolerant success'
+                      description:
+                        type: string
+                        example: 'Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.'
+                      created_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+      tags:
+        - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: 'Must not be greater than 5000 characters.'
+                  example: 'Et animi quos velit et fugiat.'
+                  nullable: true
+              required:
+                - name
+  '/api/v1/projects/{id}':
+    get:
+      summary: 'Показать один проект.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 17
+                    name: 'Self-enabling attitude-oriented orchestration'
+                    description: 'Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.'
+                    created_at: '2026-06-06T20:34:46.000000Z'
+                    updated_at: '2026-06-06T20:34:46.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 17
+                      name:
+                        type: string
+                        example: 'Self-enabling attitude-oriented orchestration'
+                      description:
+                        type: string
+                        example: 'Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.'
+                      created_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+      tags:
+        - Projects
+    put:
+      summary: 'Обновить проект.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 18
+                    name: 'Inverse neutral productivity'
+                    description: null
+                    created_at: '2026-06-06T20:34:46.000000Z'
+                    updated_at: '2026-06-06T20:34:46.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 18
+                      name:
+                        type: string
+                        example: 'Inverse neutral productivity'
+                      description:
+                        type: string
+                        example: null
+                        nullable: true
+                      created_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+      tags:
+        - Projects
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: 'Must not be greater than 5000 characters.'
+                  example: 'Et animi quos velit et fugiat.'
+                  nullable: true
+    delete:
+      summary: 'Удалить проект (вместе с задачами — каскадом из миграции).'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: Deleted
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ''
+      tags:
+        - Projects
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the project.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/stats:
+    get:
+      summary: 'Сводка по данным пользователя (кешируется на 60 секунд).'
+      operationId: '60'
+      description: "Результат кешируется на 60 секунд (Cache::remember): первый запрос\nсчитает агрегаты, последующие в течение TTL берут готовое из кеша.\nДопускается небольшая неактуальность данных — обычный приём для дашбордов."
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - System
+  '/api/v1/projects/{project_id}/tasks':
+    get:
+      summary: 'Список задач конкретного проекта.'
+      operationId: ''
+      description: '$project приходит из вложенного маршрута projects/{project}/tasks.'
+      parameters:
+        -
+          in: query
+          name: status
+          description: 'Фильтр по статусу: todo, in_progress, done.'
+          example: todo
+          required: false
+          schema:
+            type: string
+            description: 'Фильтр по статусу: todo, in_progress, done.'
+            example: todo
+        -
+          in: query
+          name: search
+          description: 'Поиск по названию.'
+          example: deploy
+          required: false
+          schema:
+            type: string
+            description: 'Поиск по названию.'
+            example: deploy
+        -
+          in: query
+          name: sort
+          description: 'Поля: created_at, due_date, title, status (префикс - для убывания).'
+          example: '-due_date'
+          required: false
+          schema:
+            type: string
+            description: 'Поля: created_at, due_date, title, status (префикс - для убывания).'
+            example: '-due_date'
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 21
+                      project_id: 19
+                      title: 'Animi quos velit.'
+                      description: 'Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.'
+                      status: done
+                      due_date: '2026-06-25'
+                      created_at: '2026-06-06T20:34:46.000000Z'
+                      updated_at: '2026-06-06T20:34:46.000000Z'
+                    -
+                      id: 22
+                      project_id: 20
+                      title: 'Praesentium quis adipisci molestias.'
+                      description: 'Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.'
+                      status: in_progress
+                      due_date: '2026-06-29'
+                      created_at: '2026-06-06T20:34:46.000000Z'
+                      updated_at: '2026-06-06T20:34:46.000000Z'
+                  links:
+                    first: '/?page=1'
+                    last: '/?page=1'
+                    prev: null
+                    next: null
+                  meta:
+                    current_page: 1
+                    from: 1
+                    last_page: 1
+                    links:
+                      -
+                        url: null
+                        label: '&laquo; Previous'
+                        page: null
+                        active: false
+                      -
+                        url: '/?page=1'
+                        label: '1'
+                        page: 1
+                        active: true
+                      -
+                        url: null
+                        label: 'Next &raquo;'
+                        page: null
+                        active: false
+                    path: /
+                    per_page: 15
+                    to: 2
+                    total: 2
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - id: 21
+                        project_id: 19
+                        title: 'Animi quos velit.'
+                        description: 'Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.'
+                        status: done
+                        due_date: '2026-06-25'
+                        created_at: '2026-06-06T20:34:46.000000Z'
+                        updated_at: '2026-06-06T20:34:46.000000Z'
+                      - id: 22
+                        project_id: 20
+                        title: 'Praesentium quis adipisci molestias.'
+                        description: 'Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.'
+                        status: in_progress
+                        due_date: '2026-06-29'
+                        created_at: '2026-06-06T20:34:46.000000Z'
+                        updated_at: '2026-06-06T20:34:46.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 21
+                        project_id:
+                          type: integer
+                          example: 19
+                        title:
+                          type: string
+                          example: 'Animi quos velit.'
+                        description:
+                          type: string
+                          example: 'Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.'
+                        status:
+                          type: string
+                          example: done
+                        due_date:
+                          type: string
+                          example: '2026-06-25'
+                        created_at:
+                          type: string
+                          example: '2026-06-06T20:34:46.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2026-06-06T20:34:46.000000Z'
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: '/?page=1'
+                      last:
+                        type: string
+                        example: '/?page=1'
+                      prev:
+                        type: string
+                        example: null
+                        nullable: true
+                      next:
+                        type: string
+                        example: null
+                        nullable: true
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      from:
+                        type: integer
+                        example: 1
+                      last_page:
+                        type: integer
+                        example: 1
+                      links:
+                        type: array
+                        example:
+                          - url: null
+                            label: '&laquo; Previous'
+                            page: null
+                            active: false
+                          - url: '/?page=1'
+                            label: '1'
+                            page: 1
+                            active: true
+                          - url: null
+                            label: 'Next &raquo;'
+                            page: null
+                            active: false
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              example: null
+                              nullable: true
+                            label:
+                              type: string
+                              example: '&laquo; Previous'
+                            page:
+                              type: string
+                              example: null
+                              nullable: true
+                            active:
+                              type: boolean
+                              example: false
+                      path:
+                        type: string
+                        example: /
+                      per_page:
+                        type: integer
+                        example: 15
+                      to:
+                        type: integer
+                        example: 2
+                      total:
+                        type: integer
+                        example: 2
+      tags:
+        - Tasks
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: ''
+                  example: todo
+                  enum:
+                    - todo
+                    - in_progress
+                    - done
+                search:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                sort:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: 'n'
+    post:
+      summary: 'Создать задачу внутри проекта.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 23
+                    project_id: 21
+                    title: 'Nihil accusantium harum mollitia.'
+                    description: null
+                    status: todo
+                    due_date: '2026-06-26'
+                    created_at: '2026-06-06T20:34:46.000000Z'
+                    updated_at: '2026-06-06T20:34:46.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 23
+                      project_id:
+                        type: integer
+                        example: 21
+                      title:
+                        type: string
+                        example: 'Nihil accusantium harum mollitia.'
+                      description:
+                        type: string
+                        example: null
+                        nullable: true
+                      status:
+                        type: string
+                        example: todo
+                      due_date:
+                        type: string
+                        example: '2026-06-26'
+                      created_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+      tags:
+        - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: 'Must not be greater than 5000 characters.'
+                  example: 'Et animi quos velit et fugiat.'
+                  nullable: true
+                status:
+                  type: string
+                  description: ''
+                  example: done
+                  enum:
+                    - todo
+                    - in_progress
+                    - done
+                due_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2026-06-06T20:34:46'
+                  nullable: true
+              required:
+                - title
+    parameters:
+      -
+        in: path
+        name: project_id
+        description: 'The ID of the project.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{id}':
+    get:
+      summary: 'Показать одну задачу (shallow-маршрут tasks/{task}).'
+      operationId: shallowTaskstask
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 24
+                    project_id: 22
+                    title: 'Adipisci quidem nostrum qui commodi.'
+                    description: 'Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.'
+                    status: in_progress
+                    due_date: null
+                    created_at: '2026-06-06T20:34:46.000000Z'
+                    updated_at: '2026-06-06T20:34:46.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 24
+                      project_id:
+                        type: integer
+                        example: 22
+                      title:
+                        type: string
+                        example: 'Adipisci quidem nostrum qui commodi.'
+                      description:
+                        type: string
+                        example: 'Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.'
+                      status:
+                        type: string
+                        example: in_progress
+                      due_date:
+                        type: string
+                        example: null
+                        nullable: true
+                      created_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+      tags:
+        - Tasks
+    put:
+      summary: 'Обновить задачу.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 25
+                    project_id: 23
+                    title: 'Nihil accusantium harum mollitia.'
+                    description: null
+                    status: todo
+                    due_date: '2026-06-26'
+                    created_at: '2026-06-06T20:34:46.000000Z'
+                    updated_at: '2026-06-06T20:34:46.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 25
+                      project_id:
+                        type: integer
+                        example: 23
+                      title:
+                        type: string
+                        example: 'Nihil accusantium harum mollitia.'
+                      description:
+                        type: string
+                        example: null
+                        nullable: true
+                      status:
+                        type: string
+                        example: todo
+                      due_date:
+                        type: string
+                        example: '2026-06-26'
+                      created_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2026-06-06T20:34:46.000000Z'
+      tags:
+        - Tasks
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: 'Must not be greater than 5000 characters.'
+                  example: 'Et animi quos velit et fugiat.'
+                  nullable: true
+                status:
+                  type: string
+                  description: ''
+                  example: done
+                  enum:
+                    - todo
+                    - in_progress
+                    - done
+                due_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2026-06-06T20:34:46'
+                  nullable: true
+    delete:
+      summary: 'Удалить задачу.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: Deleted
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ''
+      tags:
+        - Tasks
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the task.'
+        example: 1
+        required: true
+        schema:
+          type: integer

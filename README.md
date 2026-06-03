@@ -161,6 +161,19 @@ Use it via `Log::channel('structured')->info(...)`.
 To enable it: `composer require sentry/sentry-laravel`, then publish the config
 and set `SENTRY_LARAVEL_DSN` in `.env`.
 
+## Generated API docs
+
+Interactive HTML docs, an OpenAPI 3 spec and a Postman collection are generated
+from the code (routes, Form Requests, API Resources) with
+[Scribe](https://scribe.knuckles.wtf):
+
+```bash
+composer docs   # regenerate -> public/docs/{index.html, openapi.yaml, collection.json}
+```
+
+Open `public/docs/index.html`, or import `public/docs/openapi.yaml` into any
+OpenAPI tool.
+
 ## Quality checks
 
 ```bash
