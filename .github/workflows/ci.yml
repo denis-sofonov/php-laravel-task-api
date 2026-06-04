@@ -34,7 +34,7 @@ jobs:
         with:
           php-version: '8.4'
           extensions: mbstring, pdo_pgsql, bcmath, intl
-          coverage: none
+          coverage: pcov
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
@@ -53,5 +53,5 @@ jobs:
       - name: Static analysis (Larastan)
         run: composer analyse
 
-      - name: Tests (Pest)
-        run: composer test
+      - name: Tests (Pest) with coverage
+        run: composer test:coverage

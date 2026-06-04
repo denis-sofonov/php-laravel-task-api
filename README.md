@@ -25,7 +25,8 @@ clean Laravel backend is structured.
 - **API Resources** — explicit, stable JSON output (no leaking model internals).
 - **Type-safe enum** — `TaskStatus` (`todo` / `in_progress` / `done`).
 - **Pagination** on list endpoints.
-- **24 feature tests** covering happy paths, validation and authorization.
+- **46 tests** (feature + unit) covering happy paths, validation, authorization,
+  rate limiting, email verification and password reset.
 
 ## Requirements
 
@@ -181,7 +182,8 @@ composer lint        # apply Laravel Pint code style
 composer lint:test   # verify code style without changing files
 composer analyse     # run Larastan (PHPStan) static analysis
 composer test        # run the Pest test suite
-composer check       # run all of the above (used in CI)
+composer test:coverage # run tests with coverage (needs pcov/xdebug), min 70%
+composer check       # lint + analyse + test (used in CI)
 ```
 
 Tests run against a dedicated `template_testing` PostgreSQL database, created
