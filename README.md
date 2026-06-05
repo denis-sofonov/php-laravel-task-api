@@ -1,9 +1,13 @@
-# Backend Template — Laravel REST API
+# Reference Backend — Laravel (PHP 8.3+)
 
-A production-minded starter for building JSON APIs with Laravel. It ships with
-token authentication, a relational CRUD domain, per-user authorization, a full
-test suite, static analysis and CI — so it can be used as a reference of how a
-clean Laravel backend is structured.
+A reference implementation of a clean, production-minded JSON API in Laravel —
+built as a code sample to show how I structure a backend service end to end:
+token authentication, a relational CRUD domain, per-user authorization,
+validation, tests, static analysis, Docker and CI.
+
+> It is intentionally a small, concrete domain (projects & tasks) rather than a
+> generic boilerplate — the goal is to demonstrate engineering decisions, not to
+> be a fill-in-the-blanks starter. See [Design decisions](#design-decisions--trade-offs).
 
 ## Tech stack
 
@@ -27,6 +31,32 @@ clean Laravel backend is structured.
 - **Pagination** on list endpoints.
 - **46 tests** (feature + unit) covering happy paths, validation, authorization,
   rate limiting, email verification and password reset.
+
+## Design decisions & trade-offs
+
+The point of this repo is the reasoning, not the feature count. Key choices:
+
+- **Sanctum tokens over JWT.** First-party, supports server-side revocation
+  (logout actually invalidates a token). Trade-off: a DB lookup per request and
+  not fully stateless across services — JWT would fit a multi-service mesh better.
+- **API Resources for every response.** The JSON contract is decoupled from the
+  database schema, so columns can change without breaking clients. Trade-off:
+  a little extra boilerplate per model.
+- **One Form Request per action.** Validation lives outside controllers; separate
+  `Store`/`Update` requests model "create" vs. "partial update" precisely.
+- **Authorization by ownership (Policies), no roles yet.** Simple and sufficient
+  here. Trade-off: no RBAC — I'd add `spatie/laravel-permission` once roles appear.
+- **PostgreSQL + `ILIKE` search.** Pragmatic and readable. Trade-off: a leading
+  wildcard can't use a B-tree index; at scale I'd switch to a trigram/full-text index.
+- **Database queue, not Redis/Horizon.** Zero extra infrastructure for a sample.
+  Trade-off: Redis + Horizon is the better choice for real throughput and monitoring.
+- **Offset pagination.** Fine for moderate datasets; I'd move to cursor pagination
+  for very large or realtime-changing lists.
+- **Thin controllers, no service layer.** Idiomatic for a domain this size.
+  As business logic grows I'd extract Action/Service classes rather than fatten controllers.
+- **Versioned API (`/api/v1`) from day one.** Cheap insurance against breaking clients.
+- **Tests run on real PostgreSQL, not SQLite.** Same engine as production catches
+  engine-specific bugs. Trade-off: the database must be running and tests are a touch slower.
 
 ## Requirements
 
@@ -195,16 +225,20 @@ automatically by the Docker init script (`docker/postgres/initdb`).
 app/
   Enums/TaskStatus.php          # type-safe task status
   Http/
-    Controllers/                # thin controllers (Auth, Project, Task)
+    Controllers/                # thin controllers (Auth, Project, Task, Health, Stats)
     Requests/                   # Form Request validation
     Resources/                  # JSON output transformers
+  Jobs/                         # queued background jobs
   Models/                       # Eloquent models + relationships
   Policies/                     # per-user authorization rules
+  Providers/                    # rate limiters, password-reset URL
 database/
   factories/  migrations/  seeders/
 routes/api.php                  # API route definitions
-tests/Feature/                  # Pest feature tests
-docker-compose.yml              # PostgreSQL service
+tests/Feature/  tests/Unit/     # Pest tests
+docker/                         # Dockerfile, nginx, postgres init
+docker-compose.yml              # app (php-fpm) + web (nginx) + postgres
+public/docs/                    # generated OpenAPI docs (Scribe)
 ```
 
 ## License
