@@ -1,5 +1,7 @@
 # Reference Backend — Laravel (PHP 8.3+)
 
+[![CI](https://github.com/denis-sofonov/php-laravel-task-api/actions/workflows/ci.yml/badge.svg)](https://github.com/denis-sofonov/php-laravel-task-api/actions/workflows/ci.yml)
+
 A reference implementation of a clean, production-minded JSON API in Laravel —
 built as a code sample to show how I structure a backend service end to end:
 token authentication, a relational CRUD domain, per-user authorization,
