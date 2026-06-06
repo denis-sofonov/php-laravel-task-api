@@ -43,8 +43,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Проекты, которыми владеет пользователь.
-     *
      * @return HasMany<Project, $this>
      */
     public function projects(): HasMany

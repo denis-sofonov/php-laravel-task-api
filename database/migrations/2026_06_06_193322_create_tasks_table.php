@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
-            // Статус хранится строкой; допустимые значения задаёт enum TaskStatus.
+            // Stored as a string; the allowed values are defined by the TaskStatus enum.
             $table->string('status')->default(TaskStatus::Todo->value)->index();
             $table->date('due_date')->nullable();
             $table->timestamps();

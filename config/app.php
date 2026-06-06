@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    // Базовый URL фронтенда (SPA) — используется в ссылках писем (сброс пароля).
+    // Frontend (SPA) base URL — used in email links (e.g. password reset).
     'frontend_url' => env('FRONTEND_URL', env('APP_URL', 'http://localhost')),
 
     /*

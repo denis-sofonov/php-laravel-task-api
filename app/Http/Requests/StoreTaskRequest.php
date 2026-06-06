@@ -22,7 +22,7 @@ class StoreTaskRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:5000'],
-            // Rule::enum принимает только значения enum TaskStatus.
+            // Rule::enum only accepts values of the TaskStatus enum.
             'status' => ['sometimes', Rule::enum(TaskStatus::class)],
             'due_date' => ['nullable', 'date'],
         ];

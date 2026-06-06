@@ -75,16 +75,16 @@ it('revokes the token on logout', function () {
         'password' => 'Password123!',
     ])->json('token');
 
-    // С действующим токеном logout проходит.
+    // Logout succeeds with a valid token.
     $this->withToken($token)->postJson('/api/v1/logout')->assertOk();
 
-    // Токен физически удалён из базы.
+    // The token is physically removed from the database.
     expect($user->tokens()->count())->toBe(0);
 
-    // Сбрасываем закешированный в guard'е этого теста стейт авторизации,
-    // иначе повторный запрос увидит "старого" пользователя из памяти.
+    // Reset the guard state cached within this test, otherwise the next request
+    // would still see the "old" user from memory.
     $this->app['auth']->forgetGuards();
 
-    // Тот же токен после logout уже не работает.
+    // The same token no longer works after logout.
     $this->withToken($token)->getJson('/api/v1/user')->assertUnauthorized();
 });

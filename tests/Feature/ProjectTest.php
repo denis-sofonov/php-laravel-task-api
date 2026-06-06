@@ -10,7 +10,7 @@ it('requires authentication', function () {
 it('lists only the projects of the authenticated user', function () {
     $user = User::factory()->create();
     Project::factory(2)->for($user)->create();
-    Project::factory(3)->create(); // чужие проекты не должны попасть в выдачу
+    Project::factory(3)->create(); // other users' projects must not appear
 
     $this->actingAs($user, 'sanctum')
         ->getJson('/api/v1/projects')
@@ -76,7 +76,7 @@ it('deletes a project', function () {
 });
 
 it('forbids access to a project owned by another user', function () {
-    $project = Project::factory()->create(); // принадлежит случайному юзеру
+    $project = Project::factory()->create(); // owned by a random user
     $intruder = User::factory()->create();
 
     $this->actingAs($intruder, 'sanctum')

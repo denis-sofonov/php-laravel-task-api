@@ -12,8 +12,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
-     * Какие поля пользователя превращаются в JSON.
-     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array

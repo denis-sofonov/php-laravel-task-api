@@ -8,7 +8,8 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreProjectRequest extends FormRequest
 {
     /**
-     * Маршрут уже под auth:sanctum; любой авторизованный может создать свой проект.
+     * The route is already behind auth:sanctum; any authenticated user may
+     * create their own project.
      */
     public function authorize(): bool
     {

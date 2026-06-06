@@ -8,9 +8,9 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Пример фоновой задачи: выполняется воркером очереди, а не в HTTP-запросе.
- * Здесь просто пишем структурный лог, но точно так же выносят в очередь
- * отправку писем, генерацию отчётов, обращения к внешним API и т.п.
+ * Example background job: runs on a queue worker, not in the HTTP request.
+ * It only writes a structured log here, but the same pattern offloads emails,
+ * report generation, external API calls, etc.
  */
 class LogProjectActivity implements ShouldQueue
 {
@@ -30,7 +30,7 @@ class LogProjectActivity implements ShouldQueue
     }
 
     /**
-     * Удобный конструктор для события "проект создан".
+     * Convenience constructor for the "project created" event.
      */
     public static function created(Project $project): self
     {

@@ -9,8 +9,8 @@ use Throwable;
 class HealthController extends Controller
 {
     /**
-     * Проверка живости сервиса для load balancer / k8s probes.
-     * Возвращает 200, если БД доступна, иначе 503.
+     * Liveness probe for load balancers / k8s. Returns 200 if the DB is
+     * reachable, otherwise 503.
      */
     public function show(): JsonResponse
     {

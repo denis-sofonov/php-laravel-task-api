@@ -66,7 +66,7 @@ return [
             'replace_placeholders' => true,
         ],
 
-        // Структурные логи в формате JSON — удобны для сбора в ELK / Loki / Datadog.
+        // JSON-formatted structured logs — convenient for ELK / Loki / Datadog.
         'structured' => [
             'driver' => 'single',
             'path' => storage_path('logs/structured.log'),

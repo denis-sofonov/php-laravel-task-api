@@ -11,15 +11,14 @@ use Illuminate\Http\Request;
 class EmailVerificationController extends Controller
 {
     /**
-     * Подтверждение email по подписанной ссылке из письма.
-     * Ссылка содержит id пользователя и hash (sha1 от email) — auth не требуется,
-     * подлинность гарантирует подпись маршрута (middleware 'signed').
+     * Verify an email via the signed link. No auth required — the route
+     * signature ('signed' middleware) is what proves authenticity.
      */
     public function verify(Request $request, int $id, string $hash): JsonResponse
     {
         $user = User::findOrFail($id);
 
-        // Хеш в ссылке должен совпадать с хешем текущего email пользователя.
+        // The hash in the link must match the hash of the user's current email.
         if (! hash_equals($hash, sha1($user->getEmailForVerification()))) {
             return response()->json(['message' => 'Invalid verification link.'], 403);
         }
@@ -33,7 +32,7 @@ class EmailVerificationController extends Controller
     }
 
     /**
-     * Повторная отправка письма подтверждения (для авторизованного пользователя).
+     * Resend the verification email to the authenticated user.
      */
     public function resend(Request $request): JsonResponse
     {

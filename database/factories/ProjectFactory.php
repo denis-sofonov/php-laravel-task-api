@@ -12,14 +12,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ProjectFactory extends Factory
 {
     /**
-     * Состояние по умолчанию для одного проекта.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
         return [
-            // Если владельца не передали явно — создастся новый пользователь.
+            // Creates a new user if an owner isn't provided explicitly.
             'user_id' => User::factory(),
             'name' => fake()->unique()->catchPhrase(),
             'description' => fake()->optional()->paragraph(),

@@ -9,7 +9,7 @@ enum TaskStatus: string
     case Done = 'done';
 
     /**
-     * Список всех значений — удобно для правила валидации Rule::enum/in.
+     * All backing values (handy for `in` / `Rule::enum` validation).
      *
      * @return array<int, string>
      */

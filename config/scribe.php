@@ -235,8 +235,8 @@ return [
         'responses' => configureStrategy(
             Defaults::RESPONSES_STRATEGIES,
             Strategies\Responses\ResponseCalls::withSettings(
-                // Отключаем реальные HTTP-вызовы при генерации; ответы описываем
-                // аннотациями @apiResource (генерируются из ресурсов и фабрик).
+                // No live HTTP calls during generation; responses come from the
+                // @apiResource annotations (built from resources and factories).
                 only: [],
                 // Recommended: disable debug mode in response calls to avoid error stack traces in responses
                 config: [

@@ -15,17 +15,17 @@ use Illuminate\Http\Response;
 /**
  * @group Projects
  *
- * Управление проектами текущего пользователя.
+ * Manage the authenticated user's projects.
  *
  * @authenticated
  */
 class ProjectController extends Controller
 {
     /**
-     * Список проектов текущего пользователя (с пагинацией).
+     * List the authenticated user's projects (paginated).
      *
-     * @queryParam search string Поиск по названию. Example: redesign
-     * @queryParam sort string Сортировка: created_at или name, с префиксом - для убывания. Example: -created_at
+     * @queryParam search string Filter by name. Example: redesign
+     * @queryParam sort string created_at or name, prefix with - for descending. Example: -created_at
      *
      * @apiResourceCollection App\Http\Resources\ProjectResource
      *
@@ -40,12 +40,13 @@ class ProjectController extends Controller
 
         $query = $request->user()
             ->projects()
-            ->withCount('tasks'); // tasks_count без загрузки всех задач (нет N+1)
+            ->withCount('tasks'); // tasks_count without loading the tasks (avoids N+1)
 
         if (isset($filters['search'])) {
             $query->where('name', 'ilike', '%'.$filters['search'].'%');
         }
 
+        // Whitelist guards against arbitrary columns being injected into ORDER BY.
         $sort = $filters['sort'] ?? '-created_at';
         $column = ltrim($sort, '-');
         if (in_array($column, ['created_at', 'name'], true)) {
@@ -60,7 +61,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Создать проект для текущего пользователя.
+     * Create a project for the authenticated user.
      *
      * @apiResource App\Http\Resources\ProjectResource
      *
@@ -68,10 +69,9 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request): JsonResponse
     {
-        // create() через связь сам проставит user_id.
+        // Saving through the relation sets user_id automatically.
         $project = $request->user()->projects()->create($request->validated());
 
-        // Фоновая задача: уходит в очередь, не задерживает HTTP-ответ.
         dispatch(LogProjectActivity::created($project));
 
         return ProjectResource::make($project)
@@ -80,7 +80,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Показать один проект.
+     * Show a single project.
      *
      * @apiResource App\Http\Resources\ProjectResource
      *
@@ -94,7 +94,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Обновить проект.
+     * Update a project.
      *
      * @apiResource App\Http\Resources\ProjectResource
      *
@@ -110,7 +110,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Удалить проект (вместе с задачами — каскадом из миграции).
+     * Delete a project (its tasks are removed via the migration's cascade).
      *
      * @response 204 scenario="Deleted"
      */

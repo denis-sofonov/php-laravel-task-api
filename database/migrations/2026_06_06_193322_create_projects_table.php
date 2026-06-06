@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            // Владелец проекта. constrained() создаёт внешний ключ на users.id,
-            // cascadeOnDelete() — удалить проекты вместе с пользователем.
+            // Owner. constrained() adds the FK to users.id; cascadeOnDelete()
+            // removes a user's projects together with the user.
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->text('description')->nullable();

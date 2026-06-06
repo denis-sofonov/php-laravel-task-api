@@ -5,6 +5,5 @@ parameters:
     paths:
         - app
 
-    # Уровень строгости анализа: 0 (мягкий) .. 10 (максимум).
-    # 6 — хороший баланс для рабочего проекта.
+    # Analysis strictness: 0 (lax) .. 10 (max). 6 is a good balance for a real project.
     level: 6

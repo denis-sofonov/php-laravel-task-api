@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*'),
         );
 
-        // Единый ответ "не найдено" для API — без утечки имён моделей/классов.
+        // Uniform "not found" response for the API — without leaking model/class names.
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json(['message' => 'Resource not found.'], 404);

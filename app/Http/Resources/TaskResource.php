@@ -21,7 +21,7 @@ class TaskResource extends JsonResource
             'project_id' => $this->project_id,
             'title' => $this->title,
             'description' => $this->description,
-            // $this->status — объект enum TaskStatus, в JSON уходит его строковое значение.
+            // $this->status is a TaskStatus enum; expose its string value.
             'status' => $this->status->value,
             'due_date' => $this->due_date?->toDateString(),
             'created_at' => $this->created_at,

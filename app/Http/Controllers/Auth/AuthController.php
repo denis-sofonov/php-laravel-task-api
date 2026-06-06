@@ -15,16 +15,11 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    /**
-     * Регистрация нового пользователя и выдача токена.
-     */
     public function register(RegisterRequest $request): JsonResponse
     {
-        // validated() возвращает только прошедшие валидацию поля — безопаснее,
-        // чем брать весь $request. Пароль захешируется автоматически (cast 'hashed').
+        // Password is hashed automatically by the model's 'hashed' cast.
         $user = User::create($request->validated());
 
-        // Отправляем письмо с ссылкой подтверждения email (через лог-мейлер в dev).
         event(new Registered($user));
 
         $token = $user->createToken($this->tokenName($request))->plainTextToken;
@@ -35,15 +30,12 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * Вход: проверяем учётные данные и выдаём новый токен.
-     */
     public function login(LoginRequest $request): JsonResponse
     {
         $user = User::where('email', $request->email)->first();
 
-        // Одинаковое сообщение для "нет пользователя" и "неверный пароль" —
-        // чтобы не подсказывать атакующему, какие email зарегистрированы.
+        // Same error for "unknown user" and "wrong password" so we don't reveal
+        // which emails are registered.
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
@@ -58,27 +50,19 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Текущий авторизованный пользователь (по токену).
-     */
     public function me(Request $request): UserResource
     {
         return new UserResource($request->user());
     }
 
-    /**
-     * Выход: отзываем только тот токен, которым сделан текущий запрос.
-     */
     public function logout(Request $request): JsonResponse
     {
+        // Revoke only the token used for this request, not every session.
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out successfully.']);
     }
 
-    /**
-     * Имя токена — из тела запроса (device_name) или по умолчанию.
-     */
     private function tokenName(Request $request): string
     {
         return $request->input('device_name', 'api');

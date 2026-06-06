@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
-        // Ссылка в письме сброса пароля ведёт на фронтенд (SPA), а не на бэкенд.
+        // The reset link in the email points at the frontend (SPA), not the API.
         ResetPassword::createUrlUsing(function (CanResetPassword $notifiable, string $token) {
             $base = rtrim((string) config('app.frontend_url', config('app.url')), '/');
 
@@ -35,19 +35,19 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Именованные ограничители частоты запросов.
+     * Named request rate limiters.
      */
     private function configureRateLimiting(): void
     {
-        // Строгий лимит на вход/регистрацию — защита от перебора паролей.
-        // Ключ: email + IP, чтобы лимит был точечным.
+        // Strict limit on login/register to slow down password brute-forcing.
+        // Keyed by email + IP so the limit is targeted rather than global.
         RateLimiter::for('auth', function (Request $request) {
             $key = (string) $request->input('email').'|'.$request->ip();
 
             return Limit::perMinute(5)->by($key);
         });
 
-        // Общий лимит на остальной API: на пользователя (или IP для гостя).
+        // General limit for the rest of the API: per user (or per IP for guests).
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });

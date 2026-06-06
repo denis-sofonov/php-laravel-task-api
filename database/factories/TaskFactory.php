@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class TaskFactory extends Factory
 {
     /**
-     * Состояние по умолчанию для одной задачи.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -29,7 +27,7 @@ class TaskFactory extends Factory
     }
 
     /**
-     * Состояние "выполнено" — пример именованного state для тестов.
+     * "Done" state — an example named state for tests.
      */
     public function done(): static
     {

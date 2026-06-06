@@ -17,19 +17,18 @@ use Illuminate\Validation\Rule;
 /**
  * @group Tasks
  *
- * Задачи внутри проектов.
+ * Tasks that belong to a project.
  *
  * @authenticated
  */
 class TaskController extends Controller
 {
     /**
-     * Список задач конкретного проекта.
-     * $project приходит из вложенного маршрута projects/{project}/tasks.
+     * List the tasks of a project (paginated).
      *
-     * @queryParam status string Фильтр по статусу: todo, in_progress, done. Example: todo
-     * @queryParam search string Поиск по названию. Example: deploy
-     * @queryParam sort string Поля: created_at, due_date, title, status (префикс - для убывания). Example: -due_date
+     * @queryParam status string Filter by status: todo, in_progress, done. Example: todo
+     * @queryParam search string Filter by title. Example: deploy
+     * @queryParam sort string created_at, due_date, title, status (prefix with - for descending). Example: -due_date
      *
      * @apiResourceCollection App\Http\Resources\TaskResource
      *
@@ -47,18 +46,16 @@ class TaskController extends Controller
 
         $query = $project->tasks();
 
-        // Фильтр по статусу.
         if (isset($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
-        // Поиск по названию (ilike — регистронезависимо в PostgreSQL).
+        // ilike is case-insensitive in PostgreSQL.
         if (isset($filters['search'])) {
             $query->where('title', 'ilike', '%'.$filters['search'].'%');
         }
 
-        // Сортировка по белому списку полей: ?sort=due_date или ?sort=-created_at.
-        // Белый список защищает от инъекции произвольных колонок в ORDER BY.
+        // Whitelist guards against arbitrary columns being injected into ORDER BY.
         $sort = $filters['sort'] ?? '-created_at';
         $column = ltrim($sort, '-');
         if (in_array($column, ['created_at', 'due_date', 'title', 'status'], true)) {
@@ -73,7 +70,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Создать задачу внутри проекта.
+     * Create a task inside a project.
      *
      * @apiResource App\Http\Resources\TaskResource
      *
@@ -81,7 +78,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request, Project $project): JsonResponse
     {
-        // Изменять содержимое проекта может только его владелец.
+        // Only the project owner may add tasks to it.
         $this->authorize('update', $project);
 
         $task = $project->tasks()->create($request->validated());
@@ -92,7 +89,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Показать одну задачу (shallow-маршрут tasks/{task}).
+     * Show a single task.
      *
      * @apiResource App\Http\Resources\TaskResource
      *
@@ -106,7 +103,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Обновить задачу.
+     * Update a task.
      *
      * @apiResource App\Http\Resources\TaskResource
      *
@@ -122,7 +119,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Удалить задачу.
+     * Delete a task.
      *
      * @response 204 scenario="Deleted"
      */

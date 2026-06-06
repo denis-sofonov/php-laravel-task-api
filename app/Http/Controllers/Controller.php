@@ -6,6 +6,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 abstract class Controller
 {
-    // Даёт всем контроллерам метод $this->authorize() для проверки политик.
+    // Gives every controller the $this->authorize() helper for policy checks.
     use AuthorizesRequests;
 }

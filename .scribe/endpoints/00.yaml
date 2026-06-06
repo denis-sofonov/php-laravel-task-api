@@ -12,8 +12,10 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Проверка живости сервиса для load balancer / k8s probes.'
-      description: 'Возвращает 200, если БД доступна, иначе 503.'
+      title: |-
+        Liveness probe for load balancers / k8s. Returns 200 if the DB is
+        reachable, otherwise 503.
+      description: ''
       authenticated: false
       deprecated: false
     headers:
@@ -30,7 +32,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":"ok","services":{"database":"ok"},"timestamp":"2026-06-06T20:34:45+00:00"}'
+        content: '{"status":"ok","services":{"database":"ok"},"timestamp":"2026-06-06T21:18:27+00:00"}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -52,7 +54,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Регистрация нового пользователя и выдача токена.'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -130,7 +132,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Вход: проверяем учётные данные и выдаём новый токен.'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -208,7 +210,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Шаг 1: запросить ссылку для сброса пароля.'
+      title: 'Step 1: request a password reset link.'
       description: ''
       authenticated: false
       deprecated: false
@@ -262,7 +264,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Шаг 2: установить новый пароль по токену из письма.'
+      title: 'Step 2: set a new password using the token from the email.'
       description: ''
       authenticated: false
       deprecated: false
@@ -340,10 +342,10 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Подтверждение email по подписанной ссылке из письма.'
-      description: |-
-        Ссылка содержит id пользователя и hash (sha1 от email) — auth не требуется,
-        подлинность гарантирует подпись маршрута (middleware 'signed').
+      title: |-
+        Verify an email via the signed link. No auth required — the route
+        signature ('signed' middleware) is what proves authenticity.
+      description: ''
       authenticated: false
       deprecated: false
     headers:
@@ -411,7 +413,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Текущий авторизованный пользователь (по токену).'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -451,7 +453,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Выход: отзываем только тот токен, которым сделан текущий запрос.'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -491,7 +493,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Повторная отправка письма подтверждения (для авторизованного пользователя).'
+      title: 'Resend the verification email to the authenticated user.'
       description: ''
       authenticated: false
       deprecated: false

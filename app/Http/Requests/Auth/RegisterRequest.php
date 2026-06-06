@@ -8,17 +8,12 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
 {
-    /**
-     * Регистрация доступна любому гостю, поэтому авторизация не нужна.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
     /**
-     * Правила валидации тела запроса.
-     *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
@@ -26,8 +21,8 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
-            // 'confirmed' требует поле password_confirmation с тем же значением;
-            // Password::defaults() — централизованные правила силы пароля.
+            // 'confirmed' requires a matching password_confirmation field;
+            // Password::defaults() centralises the password-strength rules.
             'password' => ['required', 'string', 'confirmed', Password::defaults()],
         ];
     }

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Backend Template API Documentation",
-        "_postman_id": "8e96d89f-cbca-4e42-8249-94885cb5e4e4",
+        "_postman_id": "13068b09-abca-4f43-900f-856250a61e10",
         "description": "Token-authenticated REST API for managing projects and tasks.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -20,7 +20,7 @@
             "description": "",
             "item": [
                 {
-                    "name": "\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u0436\u0438\u0432\u043e\u0441\u0442\u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u0430 \u0434\u043b\u044f load balancer \/ k8s probes.",
+                    "name": "Liveness probe for load balancers \/ k8s. Returns 200 if the DB is\nreachable, otherwise 503.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -40,7 +40,7 @@
                             }
                         ],
                         "body": null,
-                        "description": "\u0412\u043e\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442 200, \u0435\u0441\u043b\u0438 \u0411\u0414 \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430, \u0438\u043d\u0430\u0447\u0435 503.",
+                        "description": "",
                         "auth": {
                             "type": "noauth"
                         }
@@ -62,13 +62,13 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"status\":\"ok\",\"services\":{\"database\":\"ok\"},\"timestamp\":\"2026-06-06T20:34:45+00:00\"}",
+                            "body": "{\"status\":\"ok\",\"services\":{\"database\":\"ok\"},\"timestamp\":\"2026-06-06T21:18:27+00:00\"}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f \u043d\u043e\u0432\u043e\u0433\u043e \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f \u0438 \u0432\u044b\u0434\u0430\u0447\u0430 \u0442\u043e\u043a\u0435\u043d\u0430.",
+                    "name": "POST api\/v1\/register",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -127,7 +127,7 @@
                     ]
                 },
                 {
-                    "name": "\u0412\u0445\u043e\u0434: \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u0435\u043c \u0443\u0447\u0451\u0442\u043d\u044b\u0435 \u0434\u0430\u043d\u043d\u044b\u0435 \u0438 \u0432\u044b\u0434\u0430\u0451\u043c \u043d\u043e\u0432\u044b\u0439 \u0442\u043e\u043a\u0435\u043d.",
+                    "name": "POST api\/v1\/login",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -186,7 +186,7 @@
                     ]
                 },
                 {
-                    "name": "\u0428\u0430\u0433 1: \u0437\u0430\u043f\u0440\u043e\u0441\u0438\u0442\u044c \u0441\u0441\u044b\u043b\u043a\u0443 \u0434\u043b\u044f \u0441\u0431\u0440\u043e\u0441\u0430 \u043f\u0430\u0440\u043e\u043b\u044f.",
+                    "name": "Step 1: request a password reset link.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -245,7 +245,7 @@
                     ]
                 },
                 {
-                    "name": "\u0428\u0430\u0433 2: \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c \u043d\u043e\u0432\u044b\u0439 \u043f\u0430\u0440\u043e\u043b\u044c \u043f\u043e \u0442\u043e\u043a\u0435\u043d\u0443 \u0438\u0437 \u043f\u0438\u0441\u044c\u043c\u0430.",
+                    "name": "Step 2: set a new password using the token from the email.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -304,7 +304,7 @@
                     ]
                 },
                 {
-                    "name": "\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435 email \u043f\u043e \u043f\u043e\u0434\u043f\u0438\u0441\u0430\u043d\u043d\u043e\u0439 \u0441\u0441\u044b\u043b\u043a\u0435 \u0438\u0437 \u043f\u0438\u0441\u044c\u043c\u0430.",
+                    "name": "Verify an email via the signed link. No auth required \u2014 the route\nsignature ('signed' middleware) is what proves authenticity.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -338,7 +338,7 @@
                             }
                         ],
                         "body": null,
-                        "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u0441\u043e\u0434\u0435\u0440\u0436\u0438\u0442 id \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f \u0438 hash (sha1 \u043e\u0442 email) \u2014 auth \u043d\u0435 \u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f,\n\u043f\u043e\u0434\u043b\u0438\u043d\u043d\u043e\u0441\u0442\u044c \u0433\u0430\u0440\u0430\u043d\u0442\u0438\u0440\u0443\u0435\u0442 \u043f\u043e\u0434\u043f\u0438\u0441\u044c \u043c\u0430\u0440\u0448\u0440\u0443\u0442\u0430 (middleware 'signed').",
+                        "description": "",
                         "auth": {
                             "type": "noauth"
                         }
@@ -374,7 +374,7 @@
                     ]
                 },
                 {
-                    "name": "\u0422\u0435\u043a\u0443\u0449\u0438\u0439 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u043e\u0432\u0430\u043d\u043d\u044b\u0439 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c (\u043f\u043e \u0442\u043e\u043a\u0435\u043d\u0443).",
+                    "name": "GET api\/v1\/user",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -422,7 +422,7 @@
                     ]
                 },
                 {
-                    "name": "\u0412\u044b\u0445\u043e\u0434: \u043e\u0442\u0437\u044b\u0432\u0430\u0435\u043c \u0442\u043e\u043b\u044c\u043a\u043e \u0442\u043e\u0442 \u0442\u043e\u043a\u0435\u043d, \u043a\u043e\u0442\u043e\u0440\u044b\u043c \u0441\u0434\u0435\u043b\u0430\u043d \u0442\u0435\u043a\u0443\u0449\u0438\u0439 \u0437\u0430\u043f\u0440\u043e\u0441.",
+                    "name": "POST api\/v1\/logout",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -470,7 +470,7 @@
                     ]
                 },
                 {
-                    "name": "\u041f\u043e\u0432\u0442\u043e\u0440\u043d\u0430\u044f \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0430 \u043f\u0438\u0441\u044c\u043c\u0430 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f (\u0434\u043b\u044f \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u043e\u0432\u0430\u043d\u043d\u043e\u0433\u043e \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f).",
+                    "name": "Resend the verification email to the authenticated user.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -521,10 +521,10 @@
         },
         {
             "name": "Projects",
-            "description": "\n\u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u0430\u043c\u0438 \u0442\u0435\u043a\u0443\u0449\u0435\u0433\u043e \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f.",
+            "description": "\nManage the authenticated user's projects.",
             "item": [
                 {
-                    "name": "\u0421\u043f\u0438\u0441\u043e\u043a \u043f\u0440\u043e\u0435\u043a\u0442\u043e\u0432 \u0442\u0435\u043a\u0443\u0449\u0435\u0433\u043e \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f (\u0441 \u043f\u0430\u0433\u0438\u043d\u0430\u0446\u0438\u0435\u0439).",
+                    "name": "List the authenticated user's projects (paginated).",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -533,13 +533,13 @@
                                 {
                                     "key": "search",
                                     "value": "redesign",
-                                    "description": "\u041f\u043e\u0438\u0441\u043a \u043f\u043e \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044e.",
+                                    "description": "Filter by name.",
                                     "disabled": false
                                 },
                                 {
                                     "key": "sort",
                                     "value": "-created_at",
-                                    "description": "\u0421\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u043a\u0430: created_at \u0438\u043b\u0438 name, \u0441 \u043f\u0440\u0435\u0444\u0438\u043a\u0441\u043e\u043c - \u0434\u043b\u044f \u0443\u0431\u044b\u0432\u0430\u043d\u0438\u044f.",
+                                    "description": "created_at or name, prefix with - for descending.",
                                     "disabled": false
                                 }
                             ],
@@ -566,13 +566,13 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\"data\":[{\"id\":14,\"name\":\"Business-focused intangible internetsolution\",\"description\":null,\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"},{\"id\":15,\"name\":\"Versatile clear-thinking database\",\"description\":null,\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"}],\"links\":{\"first\":\"\\\/?page=1\",\"last\":\"\\\/?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"page\":null,\"active\":false},{\"url\":\"\\\/?page=1\",\"label\":\"1\",\"page\":1,\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"page\":null,\"active\":false}],\"path\":\"\\\/\",\"per_page\":15,\"to\":2,\"total\":2}}",
+                            "body": "{\"data\":[{\"id\":24,\"name\":\"Business-focused intangible internetsolution\",\"description\":null,\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"},{\"id\":25,\"name\":\"Versatile clear-thinking database\",\"description\":null,\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"}],\"links\":{\"first\":\"\\\/?page=1\",\"last\":\"\\\/?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"page\":null,\"active\":false},{\"url\":\"\\\/?page=1\",\"label\":\"1\",\"page\":1,\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"page\":null,\"active\":false}],\"path\":\"\\\/\",\"per_page\":15,\"to\":2,\"total\":2}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u0440\u043e\u0435\u043a\u0442 \u0434\u043b\u044f \u0442\u0435\u043a\u0443\u0449\u0435\u0433\u043e \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f.",
+                    "name": "Create a project for the authenticated user.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -601,13 +601,13 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\"data\":{\"id\":16,\"name\":\"Reverse-engineered fault-tolerant success\",\"description\":\"Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.\",\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"}}",
+                            "body": "{\"data\":{\"id\":26,\"name\":\"Reverse-engineered fault-tolerant success\",\"description\":\"Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.\",\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043e\u0434\u0438\u043d \u043f\u0440\u043e\u0435\u043a\u0442.",
+                    "name": "Show a single project.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -641,13 +641,13 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\"data\":{\"id\":17,\"name\":\"Self-enabling attitude-oriented orchestration\",\"description\":\"Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.\",\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"}}",
+                            "body": "{\"data\":{\"id\":27,\"name\":\"Self-enabling attitude-oriented orchestration\",\"description\":\"Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.\",\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0435\u043a\u0442.",
+                    "name": "Update a project.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -684,13 +684,13 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\"data\":{\"id\":18,\"name\":\"Inverse neutral productivity\",\"description\":null,\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"}}",
+                            "body": "{\"data\":{\"id\":28,\"name\":\"Inverse neutral productivity\",\"description\":null,\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043f\u0440\u043e\u0435\u043a\u0442 (\u0432\u043c\u0435\u0441\u0442\u0435 \u0441 \u0437\u0430\u0434\u0430\u0447\u0430\u043c\u0438 \u2014 \u043a\u0430\u0441\u043a\u0430\u0434\u043e\u043c \u0438\u0437 \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0438).",
+                    "name": "Delete a project (its tasks are removed via the migration's cascade).",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -736,7 +736,7 @@
             "description": "",
             "item": [
                 {
-                    "name": "\u0421\u0432\u043e\u0434\u043a\u0430 \u043f\u043e \u0434\u0430\u043d\u043d\u044b\u043c \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f (\u043a\u0435\u0448\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u043d\u0430 60 \u0441\u0435\u043a\u0443\u043d\u0434).",
+                    "name": "Per-user counts.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -756,7 +756,7 @@
                             }
                         ],
                         "body": null,
-                        "description": "\u0420\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442 \u043a\u0435\u0448\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u043d\u0430 60 \u0441\u0435\u043a\u0443\u043d\u0434 (Cache::remember): \u043f\u0435\u0440\u0432\u044b\u0439 \u0437\u0430\u043f\u0440\u043e\u0441\n\u0441\u0447\u0438\u0442\u0430\u0435\u0442 \u0430\u0433\u0440\u0435\u0433\u0430\u0442\u044b, \u043f\u043e\u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0435 \u0432 \u0442\u0435\u0447\u0435\u043d\u0438\u0435 TTL \u0431\u0435\u0440\u0443\u0442 \u0433\u043e\u0442\u043e\u0432\u043e\u0435 \u0438\u0437 \u043a\u0435\u0448\u0430.\n\u0414\u043e\u043f\u0443\u0441\u043a\u0430\u0435\u0442\u0441\u044f \u043d\u0435\u0431\u043e\u043b\u044c\u0448\u0430\u044f \u043d\u0435\u0430\u043a\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c \u0434\u0430\u043d\u043d\u044b\u0445 \u2014 \u043e\u0431\u044b\u0447\u043d\u044b\u0439 \u043f\u0440\u0438\u0451\u043c \u0434\u043b\u044f \u0434\u0430\u0448\u0431\u043e\u0440\u0434\u043e\u0432."
+                        "description": "Cached for 60s: the aggregates are slightly stale within the TTL, which is\nan acceptable trade-off for dashboard-style numbers."
                     },
                     "response": [
                         {
@@ -784,10 +784,10 @@
         },
         {
             "name": "Tasks",
-            "description": "\n\u0417\u0430\u0434\u0430\u0447\u0438 \u0432\u043d\u0443\u0442\u0440\u0438 \u043f\u0440\u043e\u0435\u043a\u0442\u043e\u0432.",
+            "description": "\nTasks that belong to a project.",
             "item": [
                 {
-                    "name": "\u0421\u043f\u0438\u0441\u043e\u043a \u0437\u0430\u0434\u0430\u0447 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0435\u043a\u0442\u0430.",
+                    "name": "List the tasks of a project (paginated).",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -796,19 +796,19 @@
                                 {
                                     "key": "status",
                                     "value": "todo",
-                                    "description": "\u0424\u0438\u043b\u044c\u0442\u0440 \u043f\u043e \u0441\u0442\u0430\u0442\u0443\u0441\u0443: todo, in_progress, done.",
+                                    "description": "Filter by status: todo, in_progress, done.",
                                     "disabled": false
                                 },
                                 {
                                     "key": "search",
                                     "value": "deploy",
-                                    "description": "\u041f\u043e\u0438\u0441\u043a \u043f\u043e \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044e.",
+                                    "description": "Filter by title.",
                                     "disabled": false
                                 },
                                 {
                                     "key": "sort",
                                     "value": "-due_date",
-                                    "description": "\u041f\u043e\u043b\u044f: created_at, due_date, title, status (\u043f\u0440\u0435\u0444\u0438\u043a\u0441 - \u0434\u043b\u044f \u0443\u0431\u044b\u0432\u0430\u043d\u0438\u044f).",
+                                    "description": "created_at, due_date, title, status (prefix with - for descending).",
                                     "disabled": false
                                 }
                             ],
@@ -837,19 +837,19 @@
                             "mode": "raw",
                             "raw": "{\"status\":\"todo\",\"search\":\"b\",\"sort\":\"n\"}"
                         },
-                        "description": "$project \u043f\u0440\u0438\u0445\u043e\u0434\u0438\u0442 \u0438\u0437 \u0432\u043b\u043e\u0436\u0435\u043d\u043d\u043e\u0433\u043e \u043c\u0430\u0440\u0448\u0440\u0443\u0442\u0430 projects\/{project}\/tasks."
+                        "description": ""
                     },
                     "response": [
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\"data\":[{\"id\":21,\"project_id\":19,\"title\":\"Animi quos velit.\",\"description\":\"Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.\",\"status\":\"done\",\"due_date\":\"2026-06-25\",\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"},{\"id\":22,\"project_id\":20,\"title\":\"Praesentium quis adipisci molestias.\",\"description\":\"Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.\",\"status\":\"in_progress\",\"due_date\":\"2026-06-29\",\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"}],\"links\":{\"first\":\"\\\/?page=1\",\"last\":\"\\\/?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"page\":null,\"active\":false},{\"url\":\"\\\/?page=1\",\"label\":\"1\",\"page\":1,\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"page\":null,\"active\":false}],\"path\":\"\\\/\",\"per_page\":15,\"to\":2,\"total\":2}}",
+                            "body": "{\"data\":[{\"id\":26,\"project_id\":29,\"title\":\"Animi quos velit.\",\"description\":\"Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.\",\"status\":\"done\",\"due_date\":\"2026-06-25\",\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"},{\"id\":27,\"project_id\":30,\"title\":\"Praesentium quis adipisci molestias.\",\"description\":\"Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.\",\"status\":\"in_progress\",\"due_date\":\"2026-06-29\",\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"}],\"links\":{\"first\":\"\\\/?page=1\",\"last\":\"\\\/?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"page\":null,\"active\":false},{\"url\":\"\\\/?page=1\",\"label\":\"1\",\"page\":1,\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"page\":null,\"active\":false}],\"path\":\"\\\/\",\"per_page\":15,\"to\":2,\"total\":2}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0443 \u0432\u043d\u0443\u0442\u0440\u0438 \u043f\u0440\u043e\u0435\u043a\u0442\u0430.",
+                    "name": "Create a task inside a project.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -878,7 +878,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"b\",\"description\":\"Et animi quos velit et fugiat.\",\"status\":\"done\",\"due_date\":\"2026-06-06T20:34:46\"}"
+                            "raw": "{\"title\":\"b\",\"description\":\"Et animi quos velit et fugiat.\",\"status\":\"todo\",\"due_date\":\"2026-06-06T21:18:28\"}"
                         },
                         "description": ""
                     },
@@ -886,13 +886,13 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\"data\":{\"id\":23,\"project_id\":21,\"title\":\"Nihil accusantium harum mollitia.\",\"description\":null,\"status\":\"todo\",\"due_date\":\"2026-06-26\",\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"}}",
+                            "body": "{\"data\":{\"id\":28,\"project_id\":31,\"title\":\"Nihil accusantium harum mollitia.\",\"description\":null,\"status\":\"todo\",\"due_date\":\"2026-06-26\",\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043e\u0434\u043d\u0443 \u0437\u0430\u0434\u0430\u0447\u0443 (shallow-\u043c\u0430\u0440\u0448\u0440\u0443\u0442 tasks\/{task}).",
+                    "name": "Show a single task.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -926,13 +926,13 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\"data\":{\"id\":24,\"project_id\":22,\"title\":\"Adipisci quidem nostrum qui commodi.\",\"description\":\"Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.\",\"status\":\"in_progress\",\"due_date\":null,\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"}}",
+                            "body": "{\"data\":{\"id\":29,\"project_id\":32,\"title\":\"Adipisci quidem nostrum qui commodi.\",\"description\":\"Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.\",\"status\":\"in_progress\",\"due_date\":null,\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0443.",
+                    "name": "Update a task.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -961,7 +961,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"b\",\"description\":\"Et animi quos velit et fugiat.\",\"status\":\"done\",\"due_date\":\"2026-06-06T20:34:46\"}"
+                            "raw": "{\"title\":\"b\",\"description\":\"Et animi quos velit et fugiat.\",\"status\":\"done\",\"due_date\":\"2026-06-06T21:18:28\"}"
                         },
                         "description": ""
                     },
@@ -969,13 +969,13 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\"data\":{\"id\":25,\"project_id\":23,\"title\":\"Nihil accusantium harum mollitia.\",\"description\":null,\"status\":\"todo\",\"due_date\":\"2026-06-26\",\"created_at\":\"2026-06-06T20:34:46.000000Z\",\"updated_at\":\"2026-06-06T20:34:46.000000Z\"}}",
+                            "body": "{\"data\":{\"id\":30,\"project_id\":33,\"title\":\"Nihil accusantium harum mollitia.\",\"description\":null,\"status\":\"todo\",\"due_date\":\"2026-06-26\",\"created_at\":\"2026-06-06T21:18:28.000000Z\",\"updated_at\":\"2026-06-06T21:18:28.000000Z\"}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0443.",
+                    "name": "Delete a task.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",

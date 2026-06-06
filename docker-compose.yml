@@ -1,14 +1,14 @@
-# Окружение в Docker.
+# Docker environment.
 #
-# Два сценария:
-#   1) Только база (локальная разработка через `php artisan serve`):
+# Two modes:
+#   1) Database only (local dev via `php artisan serve`):
 #        docker compose up -d postgres
-#   2) Весь стек в контейнерах (php-fpm + nginx + postgres):
+#   2) Full stack in containers (php-fpm + nginx + postgres):
 #        docker compose up -d --build
 #        API: http://localhost:8080/api/v1
-#        миграции: docker compose exec app php artisan migrate --seed
+#        migrate: docker compose exec app php artisan migrate --seed
 #
-# Остановить: docker compose down   (с очисткой данных: docker compose down -v)
+# Stop: docker compose down   (wipe data: docker compose down -v)
 
 services:
   postgres:
@@ -20,21 +20,21 @@ services:
       POSTGRES_USER: ${DB_USERNAME:-template}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
     ports:
-      # хост:контейнер — пробрасываем 5432 наружу, чтобы локальный PHP видел базу
+      # host:container — expose 5432 so the local PHP process can reach the DB
       - "${DB_PORT:-5432}:5432"
     volumes:
-      # именованный volume — данные переживают перезапуск контейнера
+      # named volume — data survives container restarts
       - pgdata:/var/lib/postgresql/data
-      # init-скрипты выполняются один раз при первом создании контейнера
+      # init scripts run once, on first container creation
       - ./docker/postgres/initdb:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      # Laravel/CI ждут, пока база реально готова принимать соединения
+      # Laravel/CI wait until the DB is actually accepting connections
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-template} -d ${DB_DATABASE:-template}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  # PHP-FPM с кодом приложения (production-подобный образ).
+  # PHP-FPM with the application code (production-like image).
   app:
     build:
       context: .
@@ -44,14 +44,14 @@ services:
     env_file:
       - .env
     environment:
-      # Внутри сети compose база доступна по имени сервиса на стандартном порту.
+      # Inside the compose network the DB is reachable by service name on its default port.
       DB_HOST: postgres
       DB_PORT: 5432
     depends_on:
       postgres:
         condition: service_healthy
 
-  # Nginx — точка входа, проксирует PHP в контейнер app.
+  # Nginx — entry point, proxies PHP to the app container.
   web:
     image: nginx:alpine
     container_name: template_web

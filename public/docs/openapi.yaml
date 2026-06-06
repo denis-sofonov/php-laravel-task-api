@@ -9,11 +9,11 @@ tags:
   - name: Endpoints
     description: ''
   - name: Projects
-    description: "\nУправление проектами текущего пользователя."
+    description: "\nManage the authenticated user's projects."
   - name: System
     description: ''
   - name: Tasks
-    description: "\nЗадачи внутри проектов."
+    description: "\nTasks that belong to a project."
 components:
   securitySchemes:
     default:
@@ -26,9 +26,9 @@ security:
 paths:
   /api/v1/health:
     get:
-      summary: 'Проверка живости сервиса для load balancer / k8s probes.'
-      operationId: LoadBalancerK8sProbes
-      description: 'Возвращает 200, если БД доступна, иначе 503.'
+      summary: "Liveness probe for load balancers / k8s. Returns 200 if the DB is\nreachable, otherwise 503."
+      operationId: livenessProbeForLoadBalancersK8sReturns200IfTheDBIsReachableOtherwise503
+      description: ''
       parameters: []
       responses:
         200:
@@ -41,7 +41,7 @@ paths:
                   status: ok
                   services:
                     database: ok
-                  timestamp: '2026-06-06T20:34:45+00:00'
+                  timestamp: '2026-06-06T21:18:27+00:00'
                 properties:
                   status:
                     type: string
@@ -54,14 +54,14 @@ paths:
                         example: ok
                   timestamp:
                     type: string
-                    example: '2026-06-06T20:34:45+00:00'
+                    example: '2026-06-06T21:18:27+00:00'
       tags:
         - Endpoints
       security: []
   /api/v1/register:
     post:
-      summary: 'Регистрация нового пользователя и выдача токена.'
-      operationId: ''
+      summary: ''
+      operationId: postApiV1Register
       description: ''
       parameters: []
       responses:
@@ -119,8 +119,8 @@ paths:
       security: []
   /api/v1/login:
     post:
-      summary: 'Вход: проверяем учётные данные и выдаём новый токен.'
-      operationId: ''
+      summary: ''
+      operationId: postApiV1Login
       description: ''
       parameters: []
       responses:
@@ -175,8 +175,8 @@ paths:
       security: []
   /api/v1/forgot-password:
     post:
-      summary: 'Шаг 1: запросить ссылку для сброса пароля.'
-      operationId: '1'
+      summary: 'Step 1: request a password reset link.'
+      operationId: step1RequestAPasswordResetLink
       description: ''
       parameters: []
       responses:
@@ -210,8 +210,8 @@ paths:
       security: []
   /api/v1/reset-password:
     post:
-      summary: 'Шаг 2: установить новый пароль по токену из письма.'
-      operationId: '2'
+      summary: 'Step 2: set a new password using the token from the email.'
+      operationId: step2SetANewPasswordUsingTheTokenFromTheEmail
       description: ''
       parameters: []
       responses:
@@ -269,9 +269,9 @@ paths:
       security: []
   '/api/v1/email/verify/{id}/{hash}':
     get:
-      summary: 'Подтверждение email по подписанной ссылке из письма.'
-      operationId: Email
-      description: "Ссылка содержит id пользователя и hash (sha1 от email) — auth не требуется,\nподлинность гарантирует подпись маршрута (middleware 'signed')."
+      summary: "Verify an email via the signed link. No auth required — the route\nsignature ('signed' middleware) is what proves authenticity."
+      operationId: verifyAnEmailViaTheSignedLinkNoAuthRequiredTheRouteSignaturesignedMiddlewareIsWhatProvesAuthenticity
+      description: ''
       parameters: []
       responses:
         403:
@@ -308,8 +308,8 @@ paths:
           type: string
   /api/v1/user:
     get:
-      summary: 'Текущий авторизованный пользователь (по токену).'
-      operationId: ''
+      summary: ''
+      operationId: getApiV1User
       description: ''
       parameters: []
       responses:
@@ -330,8 +330,8 @@ paths:
       security: []
   /api/v1/logout:
     post:
-      summary: 'Выход: отзываем только тот токен, которым сделан текущий запрос.'
-      operationId: ''
+      summary: ''
+      operationId: postApiV1Logout
       description: ''
       parameters: []
       responses:
@@ -352,8 +352,8 @@ paths:
       security: []
   /api/v1/email/verification-notification:
     post:
-      summary: 'Повторная отправка письма подтверждения (для авторизованного пользователя).'
-      operationId: ''
+      summary: 'Resend the verification email to the authenticated user.'
+      operationId: resendTheVerificationEmailToTheAuthenticatedUser
       description: ''
       parameters: []
       responses:
@@ -374,29 +374,29 @@ paths:
       security: []
   /api/v1/projects:
     get:
-      summary: 'Список проектов текущего пользователя (с пагинацией).'
-      operationId: ''
+      summary: "List the authenticated user's projects (paginated)."
+      operationId: listTheAuthenticatedUsersProjectspaginated
       description: ''
       parameters:
         -
           in: query
           name: search
-          description: 'Поиск по названию.'
+          description: 'Filter by name.'
           example: redesign
           required: false
           schema:
             type: string
-            description: 'Поиск по названию.'
+            description: 'Filter by name.'
             example: redesign
         -
           in: query
           name: sort
-          description: 'Сортировка: created_at или name, с префиксом - для убывания.'
+          description: 'created_at or name, prefix with - for descending.'
           example: '-created_at'
           required: false
           schema:
             type: string
-            description: 'Сортировка: created_at или name, с префиксом - для убывания.'
+            description: 'created_at or name, prefix with - for descending.'
             example: '-created_at'
       responses:
         200:
@@ -408,17 +408,17 @@ paths:
                 example:
                   data:
                     -
-                      id: 14
+                      id: 24
                       name: 'Business-focused intangible internetsolution'
                       description: null
-                      created_at: '2026-06-06T20:34:46.000000Z'
-                      updated_at: '2026-06-06T20:34:46.000000Z'
+                      created_at: '2026-06-06T21:18:28.000000Z'
+                      updated_at: '2026-06-06T21:18:28.000000Z'
                     -
-                      id: 15
+                      id: 25
                       name: 'Versatile clear-thinking database'
                       description: null
-                      created_at: '2026-06-06T20:34:46.000000Z'
-                      updated_at: '2026-06-06T20:34:46.000000Z'
+                      created_at: '2026-06-06T21:18:28.000000Z'
+                      updated_at: '2026-06-06T21:18:28.000000Z'
                   links:
                     first: '/?page=1'
                     last: '/?page=1'
@@ -452,22 +452,22 @@ paths:
                   data:
                     type: array
                     example:
-                      - id: 14
+                      - id: 24
                         name: 'Business-focused intangible internetsolution'
                         description: null
-                        created_at: '2026-06-06T20:34:46.000000Z'
-                        updated_at: '2026-06-06T20:34:46.000000Z'
-                      - id: 15
+                        created_at: '2026-06-06T21:18:28.000000Z'
+                        updated_at: '2026-06-06T21:18:28.000000Z'
+                      - id: 25
                         name: 'Versatile clear-thinking database'
                         description: null
-                        created_at: '2026-06-06T20:34:46.000000Z'
-                        updated_at: '2026-06-06T20:34:46.000000Z'
+                        created_at: '2026-06-06T21:18:28.000000Z'
+                        updated_at: '2026-06-06T21:18:28.000000Z'
                     items:
                       type: object
                       properties:
                         id:
                           type: integer
-                          example: 14
+                          example: 24
                         name:
                           type: string
                           example: 'Business-focused intangible internetsolution'
@@ -477,10 +477,10 @@ paths:
                           nullable: true
                         created_at:
                           type: string
-                          example: '2026-06-06T20:34:46.000000Z'
+                          example: '2026-06-06T21:18:28.000000Z'
                         updated_at:
                           type: string
-                          example: '2026-06-06T20:34:46.000000Z'
+                          example: '2026-06-06T21:18:28.000000Z'
                   links:
                     type: object
                     properties:
@@ -572,8 +572,8 @@ paths:
                   description: 'Must not be greater than 50 characters.'
                   example: 'n'
     post:
-      summary: 'Создать проект для текущего пользователя.'
-      operationId: ''
+      summary: 'Create a project for the authenticated user.'
+      operationId: createAProjectForTheAuthenticatedUser
       description: ''
       parameters: []
       responses:
@@ -585,18 +585,18 @@ paths:
                 type: object
                 example:
                   data:
-                    id: 16
+                    id: 26
                     name: 'Reverse-engineered fault-tolerant success'
                     description: 'Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.'
-                    created_at: '2026-06-06T20:34:46.000000Z'
-                    updated_at: '2026-06-06T20:34:46.000000Z'
+                    created_at: '2026-06-06T21:18:28.000000Z'
+                    updated_at: '2026-06-06T21:18:28.000000Z'
                 properties:
                   data:
                     type: object
                     properties:
                       id:
                         type: integer
-                        example: 16
+                        example: 26
                       name:
                         type: string
                         example: 'Reverse-engineered fault-tolerant success'
@@ -605,10 +605,10 @@ paths:
                         example: 'Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.'
                       created_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
                       updated_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
       tags:
         - Projects
       requestBody:
@@ -631,8 +631,8 @@ paths:
                 - name
   '/api/v1/projects/{id}':
     get:
-      summary: 'Показать один проект.'
-      operationId: ''
+      summary: 'Show a single project.'
+      operationId: showASingleProject
       description: ''
       parameters: []
       responses:
@@ -644,18 +644,18 @@ paths:
                 type: object
                 example:
                   data:
-                    id: 17
+                    id: 27
                     name: 'Self-enabling attitude-oriented orchestration'
                     description: 'Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.'
-                    created_at: '2026-06-06T20:34:46.000000Z'
-                    updated_at: '2026-06-06T20:34:46.000000Z'
+                    created_at: '2026-06-06T21:18:28.000000Z'
+                    updated_at: '2026-06-06T21:18:28.000000Z'
                 properties:
                   data:
                     type: object
                     properties:
                       id:
                         type: integer
-                        example: 17
+                        example: 27
                       name:
                         type: string
                         example: 'Self-enabling attitude-oriented orchestration'
@@ -664,15 +664,15 @@ paths:
                         example: 'Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.'
                       created_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
                       updated_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
       tags:
         - Projects
     put:
-      summary: 'Обновить проект.'
-      operationId: ''
+      summary: 'Update a project.'
+      operationId: updateAProject
       description: ''
       parameters: []
       responses:
@@ -684,18 +684,18 @@ paths:
                 type: object
                 example:
                   data:
-                    id: 18
+                    id: 28
                     name: 'Inverse neutral productivity'
                     description: null
-                    created_at: '2026-06-06T20:34:46.000000Z'
-                    updated_at: '2026-06-06T20:34:46.000000Z'
+                    created_at: '2026-06-06T21:18:28.000000Z'
+                    updated_at: '2026-06-06T21:18:28.000000Z'
                 properties:
                   data:
                     type: object
                     properties:
                       id:
                         type: integer
-                        example: 18
+                        example: 28
                       name:
                         type: string
                         example: 'Inverse neutral productivity'
@@ -705,10 +705,10 @@ paths:
                         nullable: true
                       created_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
                       updated_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
       tags:
         - Projects
       requestBody:
@@ -728,8 +728,8 @@ paths:
                   example: 'Et animi quos velit et fugiat.'
                   nullable: true
     delete:
-      summary: 'Удалить проект (вместе с задачами — каскадом из миграции).'
-      operationId: ''
+      summary: "Delete a project (its tasks are removed via the migration's cascade)."
+      operationId: deleteAProjectitsTasksAreRemovedViaTheMigrationsCascade
       description: ''
       parameters: []
       responses:
@@ -753,9 +753,9 @@ paths:
           type: integer
   /api/v1/stats:
     get:
-      summary: 'Сводка по данным пользователя (кешируется на 60 секунд).'
-      operationId: '60'
-      description: "Результат кешируется на 60 секунд (Cache::remember): первый запрос\nсчитает агрегаты, последующие в течение TTL берут готовое из кеша.\nДопускается небольшая неактуальность данных — обычный приём для дашбордов."
+      summary: 'Per-user counts.'
+      operationId: perUserCounts
+      description: "Cached for 60s: the aggregates are slightly stale within the TTL, which is\nan acceptable trade-off for dashboard-style numbers."
       parameters: []
       responses:
         401:
@@ -774,39 +774,39 @@ paths:
         - System
   '/api/v1/projects/{project_id}/tasks':
     get:
-      summary: 'Список задач конкретного проекта.'
-      operationId: ''
-      description: '$project приходит из вложенного маршрута projects/{project}/tasks.'
+      summary: 'List the tasks of a project (paginated).'
+      operationId: listTheTasksOfAProjectpaginated
+      description: ''
       parameters:
         -
           in: query
           name: status
-          description: 'Фильтр по статусу: todo, in_progress, done.'
+          description: 'Filter by status: todo, in_progress, done.'
           example: todo
           required: false
           schema:
             type: string
-            description: 'Фильтр по статусу: todo, in_progress, done.'
+            description: 'Filter by status: todo, in_progress, done.'
             example: todo
         -
           in: query
           name: search
-          description: 'Поиск по названию.'
+          description: 'Filter by title.'
           example: deploy
           required: false
           schema:
             type: string
-            description: 'Поиск по названию.'
+            description: 'Filter by title.'
             example: deploy
         -
           in: query
           name: sort
-          description: 'Поля: created_at, due_date, title, status (префикс - для убывания).'
+          description: 'created_at, due_date, title, status (prefix with - for descending).'
           example: '-due_date'
           required: false
           schema:
             type: string
-            description: 'Поля: created_at, due_date, title, status (префикс - для убывания).'
+            description: 'created_at, due_date, title, status (prefix with - for descending).'
             example: '-due_date'
       responses:
         200:
@@ -818,23 +818,23 @@ paths:
                 example:
                   data:
                     -
-                      id: 21
-                      project_id: 19
+                      id: 26
+                      project_id: 29
                       title: 'Animi quos velit.'
                       description: 'Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.'
                       status: done
                       due_date: '2026-06-25'
-                      created_at: '2026-06-06T20:34:46.000000Z'
-                      updated_at: '2026-06-06T20:34:46.000000Z'
+                      created_at: '2026-06-06T21:18:28.000000Z'
+                      updated_at: '2026-06-06T21:18:28.000000Z'
                     -
-                      id: 22
-                      project_id: 20
+                      id: 27
+                      project_id: 30
                       title: 'Praesentium quis adipisci molestias.'
                       description: 'Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.'
                       status: in_progress
                       due_date: '2026-06-29'
-                      created_at: '2026-06-06T20:34:46.000000Z'
-                      updated_at: '2026-06-06T20:34:46.000000Z'
+                      created_at: '2026-06-06T21:18:28.000000Z'
+                      updated_at: '2026-06-06T21:18:28.000000Z'
                   links:
                     first: '/?page=1'
                     last: '/?page=1'
@@ -868,31 +868,31 @@ paths:
                   data:
                     type: array
                     example:
-                      - id: 21
-                        project_id: 19
+                      - id: 26
+                        project_id: 29
                         title: 'Animi quos velit.'
                         description: 'Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.'
                         status: done
                         due_date: '2026-06-25'
-                        created_at: '2026-06-06T20:34:46.000000Z'
-                        updated_at: '2026-06-06T20:34:46.000000Z'
-                      - id: 22
-                        project_id: 20
+                        created_at: '2026-06-06T21:18:28.000000Z'
+                        updated_at: '2026-06-06T21:18:28.000000Z'
+                      - id: 27
+                        project_id: 30
                         title: 'Praesentium quis adipisci molestias.'
                         description: 'Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.'
                         status: in_progress
                         due_date: '2026-06-29'
-                        created_at: '2026-06-06T20:34:46.000000Z'
-                        updated_at: '2026-06-06T20:34:46.000000Z'
+                        created_at: '2026-06-06T21:18:28.000000Z'
+                        updated_at: '2026-06-06T21:18:28.000000Z'
                     items:
                       type: object
                       properties:
                         id:
                           type: integer
-                          example: 21
+                          example: 26
                         project_id:
                           type: integer
-                          example: 19
+                          example: 29
                         title:
                           type: string
                           example: 'Animi quos velit.'
@@ -907,10 +907,10 @@ paths:
                           example: '2026-06-25'
                         created_at:
                           type: string
-                          example: '2026-06-06T20:34:46.000000Z'
+                          example: '2026-06-06T21:18:28.000000Z'
                         updated_at:
                           type: string
-                          example: '2026-06-06T20:34:46.000000Z'
+                          example: '2026-06-06T21:18:28.000000Z'
                   links:
                     type: object
                     properties:
@@ -1010,8 +1010,8 @@ paths:
                   description: 'Must not be greater than 50 characters.'
                   example: 'n'
     post:
-      summary: 'Создать задачу внутри проекта.'
-      operationId: ''
+      summary: 'Create a task inside a project.'
+      operationId: createATaskInsideAProject
       description: ''
       parameters: []
       responses:
@@ -1023,24 +1023,24 @@ paths:
                 type: object
                 example:
                   data:
-                    id: 23
-                    project_id: 21
+                    id: 28
+                    project_id: 31
                     title: 'Nihil accusantium harum mollitia.'
                     description: null
                     status: todo
                     due_date: '2026-06-26'
-                    created_at: '2026-06-06T20:34:46.000000Z'
-                    updated_at: '2026-06-06T20:34:46.000000Z'
+                    created_at: '2026-06-06T21:18:28.000000Z'
+                    updated_at: '2026-06-06T21:18:28.000000Z'
                 properties:
                   data:
                     type: object
                     properties:
                       id:
                         type: integer
-                        example: 23
+                        example: 28
                       project_id:
                         type: integer
-                        example: 21
+                        example: 31
                       title:
                         type: string
                         example: 'Nihil accusantium harum mollitia.'
@@ -1056,10 +1056,10 @@ paths:
                         example: '2026-06-26'
                       created_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
                       updated_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
       tags:
         - Tasks
       requestBody:
@@ -1081,7 +1081,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: done
+                  example: todo
                   enum:
                     - todo
                     - in_progress
@@ -1089,7 +1089,7 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2026-06-06T20:34:46'
+                  example: '2026-06-06T21:18:28'
                   nullable: true
               required:
                 - title
@@ -1104,8 +1104,8 @@ paths:
           type: integer
   '/api/v1/tasks/{id}':
     get:
-      summary: 'Показать одну задачу (shallow-маршрут tasks/{task}).'
-      operationId: shallowTaskstask
+      summary: 'Show a single task.'
+      operationId: showASingleTask
       description: ''
       parameters: []
       responses:
@@ -1117,24 +1117,24 @@ paths:
                 type: object
                 example:
                   data:
-                    id: 24
-                    project_id: 22
+                    id: 29
+                    project_id: 32
                     title: 'Adipisci quidem nostrum qui commodi.'
                     description: 'Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.'
                     status: in_progress
                     due_date: null
-                    created_at: '2026-06-06T20:34:46.000000Z'
-                    updated_at: '2026-06-06T20:34:46.000000Z'
+                    created_at: '2026-06-06T21:18:28.000000Z'
+                    updated_at: '2026-06-06T21:18:28.000000Z'
                 properties:
                   data:
                     type: object
                     properties:
                       id:
                         type: integer
-                        example: 24
+                        example: 29
                       project_id:
                         type: integer
-                        example: 22
+                        example: 32
                       title:
                         type: string
                         example: 'Adipisci quidem nostrum qui commodi.'
@@ -1150,15 +1150,15 @@ paths:
                         nullable: true
                       created_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
                       updated_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
       tags:
         - Tasks
     put:
-      summary: 'Обновить задачу.'
-      operationId: ''
+      summary: 'Update a task.'
+      operationId: updateATask
       description: ''
       parameters: []
       responses:
@@ -1170,24 +1170,24 @@ paths:
                 type: object
                 example:
                   data:
-                    id: 25
-                    project_id: 23
+                    id: 30
+                    project_id: 33
                     title: 'Nihil accusantium harum mollitia.'
                     description: null
                     status: todo
                     due_date: '2026-06-26'
-                    created_at: '2026-06-06T20:34:46.000000Z'
-                    updated_at: '2026-06-06T20:34:46.000000Z'
+                    created_at: '2026-06-06T21:18:28.000000Z'
+                    updated_at: '2026-06-06T21:18:28.000000Z'
                 properties:
                   data:
                     type: object
                     properties:
                       id:
                         type: integer
-                        example: 25
+                        example: 30
                       project_id:
                         type: integer
-                        example: 23
+                        example: 33
                       title:
                         type: string
                         example: 'Nihil accusantium harum mollitia.'
@@ -1203,10 +1203,10 @@ paths:
                         example: '2026-06-26'
                       created_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
                       updated_at:
                         type: string
-                        example: '2026-06-06T20:34:46.000000Z'
+                        example: '2026-06-06T21:18:28.000000Z'
       tags:
         - Tasks
       requestBody:
@@ -1236,11 +1236,11 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2026-06-06T20:34:46'
+                  example: '2026-06-06T21:18:28'
                   nullable: true
     delete:
-      summary: 'Удалить задачу.'
-      operationId: ''
+      summary: 'Delete a task.'
+      operationId: deleteATask
       description: ''
       parameters: []
       responses:

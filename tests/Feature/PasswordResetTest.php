@@ -31,7 +31,7 @@ it('resets the password with a valid token', function () {
         'password_confirmation' => 'NewPassword1!',
     ])->assertOk();
 
-    // Новый пароль работает на входе.
+    // The new password works at login.
     $this->postJson('/api/v1/login', [
         'email' => $user->email,
         'password' => 'NewPassword1!',

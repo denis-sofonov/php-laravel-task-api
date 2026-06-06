@@ -30,8 +30,8 @@ class Task extends Model
     protected $fillable = ['title', 'description', 'status', 'due_date'];
 
     /**
-     * Значения по умолчанию для новой модели (до сохранения в БД).
-     * Благодаря этому status всегда задан, даже если клиент его не прислал.
+     * Default attributes for a new model, so status is always set even when the
+     * client omits it.
      *
      * @var array<string, mixed>
      */
@@ -40,9 +40,6 @@ class Task extends Model
     ];
 
     /**
-     * Преобразование типов при чтении/записи.
-     * status автоматически становится объектом enum TaskStatus.
-     *
      * @return array<string, string>
      */
     protected function casts(): array
@@ -54,8 +51,6 @@ class Task extends Model
     }
 
     /**
-     * Задача принадлежит одному проекту.
-     *
      * @return BelongsTo<Project, $this>
      */
     public function project(): BelongsTo

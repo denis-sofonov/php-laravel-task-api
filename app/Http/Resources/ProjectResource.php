@@ -20,8 +20,8 @@ class ProjectResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            // whenCounted/whenLoaded подставляют поля только если они реально
-            // загружены — иначе ключ не попадёт в ответ (защита от N+1 и лишних данных).
+            // whenCounted/whenLoaded only add these keys when the data was actually
+            // loaded — avoids N+1 and keeps the payload lean.
             'tasks_count' => $this->whenCounted('tasks'),
             'tasks' => TaskResource::collection($this->whenLoaded('tasks')),
             'created_at' => $this->created_at,

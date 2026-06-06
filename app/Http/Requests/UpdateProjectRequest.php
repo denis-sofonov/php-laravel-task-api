@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateProjectRequest extends FormRequest
 {
     /**
-     * Право редактировать конкретный проект проверяет ProjectPolicy в контроллере.
+     * Per-project edit rights are enforced by ProjectPolicy in the controller.
      */
     public function authorize(): bool
     {

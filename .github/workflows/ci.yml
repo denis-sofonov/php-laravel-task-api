@@ -13,12 +13,12 @@ jobs:
       postgres:
         image: postgres:17-alpine
         env:
-          # CI прогоняет тесты — поднимаем сразу тестовую базу.
+          # CI runs the tests, so spin up the testing database directly.
           POSTGRES_DB: template_testing
           POSTGRES_USER: template
           POSTGRES_PASSWORD: secret
         ports:
-          # совпадает с DB_PORT из .env.example
+          # matches DB_PORT from .env.example
           - 5435:5432
         options: >-
           --health-cmd="pg_isready -U template"

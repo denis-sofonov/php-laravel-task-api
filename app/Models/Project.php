@@ -23,16 +23,14 @@ class Project extends Model
     use HasFactory;
 
     /**
-     * Поля, разрешённые для массового заполнения (create/update).
-     * user_id сюда не входит — владельца ставим из авторизации.
+     * user_id is intentionally excluded — the owner is set from the
+     * authenticated user, never from request input.
      *
      * @var list<string>
      */
     protected $fillable = ['name', 'description'];
 
     /**
-     * Проект принадлежит одному пользователю.
-     *
      * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
@@ -41,8 +39,6 @@ class Project extends Model
     }
 
     /**
-     * У проекта много задач.
-     *
      * @return HasMany<Task, $this>
      */
     public function tasks(): HasMany

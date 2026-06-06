@@ -5,7 +5,7 @@ use App\Models\User;
 it('rate limits the login endpoint after too many attempts', function () {
     $user = User::factory()->create(['password' => 'Password123!']);
 
-    // Первые 5 попыток укладываются в лимит (отдают 422 — неверный пароль).
+    // The first 5 attempts are within the limit (return 422 — wrong password).
     foreach (range(1, 5) as $ignored) {
         $this->postJson('/api/v1/login', [
             'email' => $user->email,
@@ -13,7 +13,7 @@ it('rate limits the login endpoint after too many attempts', function () {
         ])->assertStatus(422);
     }
 
-    // Шестая попадает под ограничитель -> 429 Too Many Requests.
+    // The sixth hits the limiter -> 429 Too Many Requests.
     $this->postJson('/api/v1/login', [
         'email' => $user->email,
         'password' => 'wrong-password',

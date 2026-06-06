@@ -15,11 +15,10 @@ use Illuminate\Support\Facades\Cache;
 class StatsController extends Controller
 {
     /**
-     * Сводка по данным пользователя (кешируется на 60 секунд).
+     * Per-user counts.
      *
-     * Результат кешируется на 60 секунд (Cache::remember): первый запрос
-     * считает агрегаты, последующие в течение TTL берут готовое из кеша.
-     * Допускается небольшая неактуальность данных — обычный приём для дашбордов.
+     * Cached for 60s: the aggregates are slightly stale within the TTL, which is
+     * an acceptable trade-off for dashboard-style numbers.
      */
     public function show(Request $request): JsonResponse
     {

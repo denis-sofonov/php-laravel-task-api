@@ -5,7 +5,7 @@ use App\Models\User;
 use App\Policies\ProjectPolicy;
 use Tests\TestCase;
 
-// Нужен загруженный фреймворк для Eloquent-моделей (без обращения к БД).
+// Eloquent models need the framework booted (no DB access here).
 uses(TestCase::class);
 
 it('allows the owner to view their project', function () {

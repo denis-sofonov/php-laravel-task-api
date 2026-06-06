@@ -3,7 +3,7 @@
 name: Projects
 description: |-
 
-  Управление проектами текущего пользователя.
+  Manage the authenticated user's projects.
 endpoints:
   -
     custom: []
@@ -15,10 +15,10 @@ endpoints:
       groupName: Projects
       groupDescription: |-
 
-        Управление проектами текущего пользователя.
+        Manage the authenticated user's projects.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Список проектов текущего пользователя (с пагинацией).'
+      title: "List the authenticated user's projects (paginated)."
       description: ''
       authenticated: true
       deprecated: false
@@ -32,7 +32,7 @@ endpoints:
       search:
         custom: []
         name: search
-        description: 'Поиск по названию.'
+        description: 'Filter by name.'
         required: false
         example: redesign
         type: string
@@ -43,7 +43,7 @@ endpoints:
       sort:
         custom: []
         name: sort
-        description: 'Сортировка: created_at или name, с префиксом - для убывания.'
+        description: 'created_at or name, prefix with - for descending.'
         required: false
         example: '-created_at'
         type: string
@@ -85,7 +85,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":14,"name":"Business-focused intangible internetsolution","description":null,"created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"},{"id":15,"name":"Versatile clear-thinking database","description":null,"created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":15,"to":2,"total":2}}'
+        content: '{"data":[{"id":24,"name":"Business-focused intangible internetsolution","description":null,"created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"},{"id":25,"name":"Versatile clear-thinking database","description":null,"created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":15,"to":2,"total":2}}'
         headers: []
         description: ''
     responseFields: []
@@ -106,10 +106,10 @@ endpoints:
       groupName: Projects
       groupDescription: |-
 
-        Управление проектами текущего пользователя.
+        Manage the authenticated user's projects.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Создать проект для текущего пользователя.'
+      title: 'Create a project for the authenticated user.'
       description: ''
       authenticated: true
       deprecated: false
@@ -152,7 +152,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":16,"name":"Reverse-engineered fault-tolerant success","description":"Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.","created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"}}'
+        content: '{"data":{"id":26,"name":"Reverse-engineered fault-tolerant success","description":"Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.","created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -173,10 +173,10 @@ endpoints:
       groupName: Projects
       groupDescription: |-
 
-        Управление проектами текущего пользователя.
+        Manage the authenticated user's projects.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Показать один проект.'
+      title: 'Show a single project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -207,7 +207,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":17,"name":"Self-enabling attitude-oriented orchestration","description":"Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.","created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"}}'
+        content: '{"data":{"id":27,"name":"Self-enabling attitude-oriented orchestration","description":"Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.","created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -229,10 +229,10 @@ endpoints:
       groupName: Projects
       groupDescription: |-
 
-        Управление проектами текущего пользователя.
+        Manage the authenticated user's projects.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Обновить проект.'
+      title: 'Update a project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -287,7 +287,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":18,"name":"Inverse neutral productivity","description":null,"created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"}}'
+        content: '{"data":{"id":28,"name":"Inverse neutral productivity","description":null,"created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -308,10 +308,10 @@ endpoints:
       groupName: Projects
       groupDescription: |-
 
-        Управление проектами текущего пользователя.
+        Manage the authenticated user's projects.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Удалить проект (вместе с задачами — каскадом из миграции).'
+      title: "Delete a project (its tasks are removed via the migration's cascade)."
       description: ''
       authenticated: true
       deprecated: false

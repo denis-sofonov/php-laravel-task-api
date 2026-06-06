@@ -16,14 +16,14 @@ use Illuminate\Validation\ValidationException;
 class PasswordResetController extends Controller
 {
     /**
-     * Шаг 1: запросить ссылку для сброса пароля.
+     * Step 1: request a password reset link.
      */
     public function forgot(ForgotPasswordRequest $request): JsonResponse
     {
         $status = Password::sendResetLink($request->only('email'));
 
-        // Отвечаем одинаково независимо от существования email —
-        // чтобы нельзя было выяснить, какие адреса зарегистрированы.
+        // Same response whether or not the email exists, so the endpoint can't be
+        // used to discover which addresses are registered.
         if ($status === PasswordBroker::RESET_LINK_SENT || $status === PasswordBroker::INVALID_USER) {
             return response()->json(['message' => 'If the email exists, a reset link has been sent.']);
         }
@@ -32,14 +32,14 @@ class PasswordResetController extends Controller
     }
 
     /**
-     * Шаг 2: установить новый пароль по токену из письма.
+     * Step 2: set a new password using the token from the email.
      */
     public function reset(ResetPasswordRequest $request): JsonResponse
     {
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user, string $password) {
-                // Cast 'hashed' захеширует пароль при сохранении.
+                // The 'hashed' cast hashes the password on save.
                 $user->forceFill(['password' => $password])->setRememberToken(Str::random(60));
                 $user->save();
 

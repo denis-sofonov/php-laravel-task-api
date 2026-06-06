@@ -1,7 +1,7 @@
 name: Tasks
 description: |-
 
-  Задачи внутри проектов.
+  Tasks that belong to a project.
 endpoints:
   -
     custom: []
@@ -13,11 +13,11 @@ endpoints:
       groupName: Tasks
       groupDescription: |-
 
-        Задачи внутри проектов.
+        Tasks that belong to a project.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Список задач конкретного проекта.'
-      description: '$project приходит из вложенного маршрута projects/{project}/tasks.'
+      title: 'List the tasks of a project (paginated).'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -42,7 +42,7 @@ endpoints:
       status:
         custom: []
         name: status
-        description: 'Фильтр по статусу: todo, in_progress, done.'
+        description: 'Filter by status: todo, in_progress, done.'
         required: false
         example: todo
         type: string
@@ -53,7 +53,7 @@ endpoints:
       search:
         custom: []
         name: search
-        description: 'Поиск по названию.'
+        description: 'Filter by title.'
         required: false
         example: deploy
         type: string
@@ -64,7 +64,7 @@ endpoints:
       sort:
         custom: []
         name: sort
-        description: 'Поля: created_at, due_date, title, status (префикс - для убывания).'
+        description: 'created_at, due_date, title, status (prefix with - for descending).'
         required: false
         example: '-due_date'
         type: string
@@ -122,7 +122,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":21,"project_id":19,"title":"Animi quos velit.","description":"Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.","status":"done","due_date":"2026-06-25","created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"},{"id":22,"project_id":20,"title":"Praesentium quis adipisci molestias.","description":"Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.","status":"in_progress","due_date":"2026-06-29","created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":15,"to":2,"total":2}}'
+        content: '{"data":[{"id":26,"project_id":29,"title":"Animi quos velit.","description":"Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.","status":"done","due_date":"2026-06-25","created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"},{"id":27,"project_id":30,"title":"Praesentium quis adipisci molestias.","description":"Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.","status":"in_progress","due_date":"2026-06-29","created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":15,"to":2,"total":2}}'
         headers: []
         description: ''
     responseFields: []
@@ -143,10 +143,10 @@ endpoints:
       groupName: Tasks
       groupDescription: |-
 
-        Задачи внутри проектов.
+        Tasks that belong to a project.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Создать задачу внутри проекта.'
+      title: 'Create a task inside a project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -198,7 +198,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: done
+        example: todo
         type: string
         enumValues:
           - todo
@@ -212,7 +212,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-06-06T20:34:46'
+        example: '2026-06-06T21:18:28'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -221,14 +221,14 @@ endpoints:
     cleanBodyParameters:
       title: b
       description: 'Et animi quos velit et fugiat.'
-      status: done
-      due_date: '2026-06-06T20:34:46'
+      status: todo
+      due_date: '2026-06-06T21:18:28'
     fileParameters: []
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":23,"project_id":21,"title":"Nihil accusantium harum mollitia.","description":null,"status":"todo","due_date":"2026-06-26","created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"}}'
+        content: '{"data":{"id":28,"project_id":31,"title":"Nihil accusantium harum mollitia.","description":null,"status":"todo","due_date":"2026-06-26","created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -249,10 +249,10 @@ endpoints:
       groupName: Tasks
       groupDescription: |-
 
-        Задачи внутри проектов.
+        Tasks that belong to a project.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Показать одну задачу (shallow-маршрут tasks/{task}).'
+      title: 'Show a single task.'
       description: ''
       authenticated: true
       deprecated: false
@@ -283,7 +283,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":24,"project_id":22,"title":"Adipisci quidem nostrum qui commodi.","description":"Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"in_progress","due_date":null,"created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"}}'
+        content: '{"data":{"id":29,"project_id":32,"title":"Adipisci quidem nostrum qui commodi.","description":"Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.","status":"in_progress","due_date":null,"created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -305,10 +305,10 @@ endpoints:
       groupName: Tasks
       groupDescription: |-
 
-        Задачи внутри проектов.
+        Tasks that belong to a project.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Обновить задачу.'
+      title: 'Update a task.'
       description: ''
       authenticated: true
       deprecated: false
@@ -374,7 +374,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-06-06T20:34:46'
+        example: '2026-06-06T21:18:28'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -384,13 +384,13 @@ endpoints:
       title: b
       description: 'Et animi quos velit et fugiat.'
       status: done
-      due_date: '2026-06-06T20:34:46'
+      due_date: '2026-06-06T21:18:28'
     fileParameters: []
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":25,"project_id":23,"title":"Nihil accusantium harum mollitia.","description":null,"status":"todo","due_date":"2026-06-26","created_at":"2026-06-06T20:34:46.000000Z","updated_at":"2026-06-06T20:34:46.000000Z"}}'
+        content: '{"data":{"id":30,"project_id":33,"title":"Nihil accusantium harum mollitia.","description":null,"status":"todo","due_date":"2026-06-26","created_at":"2026-06-06T21:18:28.000000Z","updated_at":"2026-06-06T21:18:28.000000Z"}}'
         headers: []
         description: ''
     responseFields: []
@@ -411,10 +411,10 @@ endpoints:
       groupName: Tasks
       groupDescription: |-
 
-        Задачи внутри проектов.
+        Tasks that belong to a project.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Удалить задачу.'
+      title: 'Delete a task.'
       description: ''
       authenticated: true
       deprecated: false

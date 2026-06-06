@@ -12,17 +12,17 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Наполнение базы демонстрационными данными.
+     * Seed the database with demo data.
      */
     public function run(): void
     {
-        // Известный пользователь для ручного тестирования (логин по этим данным).
+        // Known user for manual testing (log in with these credentials).
         $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
 
-        // 3 проекта этого пользователя, в каждом по 5 задач.
+        // 3 projects for this user, each with 5 tasks.
         Project::factory(3)
             ->for($user)
             ->hasTasks(5)

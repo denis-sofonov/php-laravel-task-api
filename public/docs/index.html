@@ -72,31 +72,33 @@
                 </li>
                                     <ul id="tocify-subheader-endpoints" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-health">
-                                <a href="#endpoints-GETapi-v1-health">Проверка живости сервиса для load balancer / k8s probes.</a>
+                                <a href="#endpoints-GETapi-v1-health">Liveness probe for load balancers / k8s. Returns 200 if the DB is
+reachable, otherwise 503.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-register">
-                                <a href="#endpoints-POSTapi-v1-register">Регистрация нового пользователя и выдача токена.</a>
+                                <a href="#endpoints-POSTapi-v1-register">POST api/v1/register</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-login">
-                                <a href="#endpoints-POSTapi-v1-login">Вход: проверяем учётные данные и выдаём новый токен.</a>
+                                <a href="#endpoints-POSTapi-v1-login">POST api/v1/login</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-forgot-password">
-                                <a href="#endpoints-POSTapi-v1-forgot-password">Шаг 1: запросить ссылку для сброса пароля.</a>
+                                <a href="#endpoints-POSTapi-v1-forgot-password">Step 1: request a password reset link.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-reset-password">
-                                <a href="#endpoints-POSTapi-v1-reset-password">Шаг 2: установить новый пароль по токену из письма.</a>
+                                <a href="#endpoints-POSTapi-v1-reset-password">Step 2: set a new password using the token from the email.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-email-verify--id---hash-">
-                                <a href="#endpoints-GETapi-v1-email-verify--id---hash-">Подтверждение email по подписанной ссылке из письма.</a>
+                                <a href="#endpoints-GETapi-v1-email-verify--id---hash-">Verify an email via the signed link. No auth required — the route
+signature ('signed' middleware) is what proves authenticity.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-user">
-                                <a href="#endpoints-GETapi-v1-user">Текущий авторизованный пользователь (по токену).</a>
+                                <a href="#endpoints-GETapi-v1-user">GET api/v1/user</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-logout">
-                                <a href="#endpoints-POSTapi-v1-logout">Выход: отзываем только тот токен, которым сделан текущий запрос.</a>
+                                <a href="#endpoints-POSTapi-v1-logout">POST api/v1/logout</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-email-verification-notification">
-                                <a href="#endpoints-POSTapi-v1-email-verification-notification">Повторная отправка письма подтверждения (для авторизованного пользователя).</a>
+                                <a href="#endpoints-POSTapi-v1-email-verification-notification">Resend the verification email to the authenticated user.</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -106,19 +108,19 @@
                 </li>
                                     <ul id="tocify-subheader-projects" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="projects-GETapi-v1-projects">
-                                <a href="#projects-GETapi-v1-projects">Список проектов текущего пользователя (с пагинацией).</a>
+                                <a href="#projects-GETapi-v1-projects">List the authenticated user's projects (paginated).</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="projects-POSTapi-v1-projects">
-                                <a href="#projects-POSTapi-v1-projects">Создать проект для текущего пользователя.</a>
+                                <a href="#projects-POSTapi-v1-projects">Create a project for the authenticated user.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="projects-GETapi-v1-projects--id-">
-                                <a href="#projects-GETapi-v1-projects--id-">Показать один проект.</a>
+                                <a href="#projects-GETapi-v1-projects--id-">Show a single project.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="projects-PUTapi-v1-projects--id-">
-                                <a href="#projects-PUTapi-v1-projects--id-">Обновить проект.</a>
+                                <a href="#projects-PUTapi-v1-projects--id-">Update a project.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="projects-DELETEapi-v1-projects--id-">
-                                <a href="#projects-DELETEapi-v1-projects--id-">Удалить проект (вместе с задачами — каскадом из миграции).</a>
+                                <a href="#projects-DELETEapi-v1-projects--id-">Delete a project (its tasks are removed via the migration's cascade).</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -128,7 +130,7 @@
                 </li>
                                     <ul id="tocify-subheader-system" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="system-GETapi-v1-stats">
-                                <a href="#system-GETapi-v1-stats">Сводка по данным пользователя (кешируется на 60 секунд).</a>
+                                <a href="#system-GETapi-v1-stats">Per-user counts.</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -138,19 +140,19 @@
                 </li>
                                     <ul id="tocify-subheader-tasks" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="tasks-GETapi-v1-projects--project_id--tasks">
-                                <a href="#tasks-GETapi-v1-projects--project_id--tasks">Список задач конкретного проекта.</a>
+                                <a href="#tasks-GETapi-v1-projects--project_id--tasks">List the tasks of a project (paginated).</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="tasks-POSTapi-v1-projects--project_id--tasks">
-                                <a href="#tasks-POSTapi-v1-projects--project_id--tasks">Создать задачу внутри проекта.</a>
+                                <a href="#tasks-POSTapi-v1-projects--project_id--tasks">Create a task inside a project.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="tasks-GETapi-v1-tasks--id-">
-                                <a href="#tasks-GETapi-v1-tasks--id-">Показать одну задачу (shallow-маршрут tasks/{task}).</a>
+                                <a href="#tasks-GETapi-v1-tasks--id-">Show a single task.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="tasks-PUTapi-v1-tasks--id-">
-                                <a href="#tasks-PUTapi-v1-tasks--id-">Обновить задачу.</a>
+                                <a href="#tasks-PUTapi-v1-tasks--id-">Update a task.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="tasks-DELETEapi-v1-tasks--id-">
-                                <a href="#tasks-DELETEapi-v1-tasks--id-">Удалить задачу.</a>
+                                <a href="#tasks-DELETEapi-v1-tasks--id-">Delete a task.</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -189,12 +191,13 @@ You can switch the language used with the tabs at the top right (or from the nav
 
     
 
-                                <h2 id="endpoints-GETapi-v1-health">Проверка живости сервиса для load balancer / k8s probes.</h2>
+                                <h2 id="endpoints-GETapi-v1-health">Liveness probe for load balancers / k8s. Returns 200 if the DB is
+reachable, otherwise 503.</h2>
 
 <p>
 </p>
 
-<p>Возвращает 200, если БД доступна, иначе 503.</p>
+
 
 <span id="example-requests-GETapi-v1-health">
 <blockquote>Example request:</blockquote>
@@ -243,7 +246,7 @@ access-control-allow-origin: *
     &quot;services&quot;: {
         &quot;database&quot;: &quot;ok&quot;
     },
-    &quot;timestamp&quot;: &quot;2026-06-06T20:34:45+00:00&quot;
+    &quot;timestamp&quot;: &quot;2026-06-06T21:18:27+00:00&quot;
 }</code>
  </pre>
     </span>
@@ -320,7 +323,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-POSTapi-v1-register">Регистрация нового пользователя и выдача токена.</h2>
+                    <h2 id="endpoints-POSTapi-v1-register">POST api/v1/register</h2>
 
 <p>
 </p>
@@ -504,7 +507,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-v1-login">Вход: проверяем учётные данные и выдаём новый токен.</h2>
+                    <h2 id="endpoints-POSTapi-v1-login">POST api/v1/login</h2>
 
 <p>
 </p>
@@ -687,7 +690,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-v1-forgot-password">Шаг 1: запросить ссылку для сброса пароля.</h2>
+                    <h2 id="endpoints-POSTapi-v1-forgot-password">Step 1: request a password reset link.</h2>
 
 <p>
 </p>
@@ -837,7 +840,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-v1-reset-password">Шаг 2: установить новый пароль по токену из письма.</h2>
+                    <h2 id="endpoints-POSTapi-v1-reset-password">Step 2: set a new password using the token from the email.</h2>
 
 <p>
 </p>
@@ -1021,13 +1024,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-GETapi-v1-email-verify--id---hash-">Подтверждение email по подписанной ссылке из письма.</h2>
+                    <h2 id="endpoints-GETapi-v1-email-verify--id---hash-">Verify an email via the signed link. No auth required — the route
+signature (&#039;signed&#039; middleware) is what proves authenticity.</h2>
 
 <p>
 </p>
 
-<p>Ссылка содержит id пользователя и hash (sha1 от email) — auth не требуется,
-подлинность гарантирует подпись маршрута (middleware 'signed').</p>
+
 
 <span id="example-requests-GETapi-v1-email-verify--id---hash-">
 <blockquote>Example request:</blockquote>
@@ -1176,7 +1179,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-GETapi-v1-user">Текущий авторизованный пользователь (по токену).</h2>
+                    <h2 id="endpoints-GETapi-v1-user">GET api/v1/user</h2>
 
 <p>
 </p>
@@ -1303,7 +1306,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-POSTapi-v1-logout">Выход: отзываем только тот токен, которым сделан текущий запрос.</h2>
+                    <h2 id="endpoints-POSTapi-v1-logout">POST api/v1/logout</h2>
 
 <p>
 </p>
@@ -1430,7 +1433,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-POSTapi-v1-email-verification-notification">Повторная отправка письма подтверждения (для авторизованного пользователя).</h2>
+                    <h2 id="endpoints-POSTapi-v1-email-verification-notification">Resend the verification email to the authenticated user.</h2>
 
 <p>
 </p>
@@ -1559,9 +1562,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
                 <h1 id="projects">Projects</h1>
 
-    <p>Управление проектами текущего пользователя.</p>
+    <p>Manage the authenticated user's projects.</p>
 
-                                <h2 id="projects-GETapi-v1-projects">Список проектов текущего пользователя (с пагинацией).</h2>
+                                <h2 id="projects-GETapi-v1-projects">List the authenticated user&#039;s projects (paginated).</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -1626,18 +1629,18 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 14,
+            &quot;id&quot;: 24,
             &quot;name&quot;: &quot;Business-focused intangible internetsolution&quot;,
             &quot;description&quot;: null,
-            &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+            &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
         },
         {
-            &quot;id&quot;: 15,
+            &quot;id&quot;: 25,
             &quot;name&quot;: &quot;Versatile clear-thinking database&quot;,
             &quot;description&quot;: null,
-            &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+            &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
         }
     ],
     &quot;links&quot;: {
@@ -1772,7 +1775,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="redesign"
                data-component="query">
     <br>
-<p>Поиск по названию. Example: <code>redesign</code></p>
+<p>Filter by name. Example: <code>redesign</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>sort</code></b>&nbsp;&nbsp;
@@ -1784,7 +1787,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="-created_at"
                data-component="query">
     <br>
-<p>Сортировка: created_at или name, с префиксом - для убывания. Example: <code>-created_at</code></p>
+<p>created_at or name, prefix with - for descending. Example: <code>-created_at</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -1813,7 +1816,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="projects-POSTapi-v1-projects">Создать проект для текущего пользователя.</h2>
+                    <h2 id="projects-POSTapi-v1-projects">Create a project for the authenticated user.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -1870,11 +1873,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 16,
+        &quot;id&quot;: 26,
         &quot;name&quot;: &quot;Reverse-engineered fault-tolerant success&quot;,
         &quot;description&quot;: &quot;Deserunt aut ab provident perspiciatis quo omnis nostrum. Adipisci quidem nostrum qui commodi incidunt iure. Et et modi ipsum nostrum.&quot;,
-        &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+        &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
     }
 }</code>
  </pre>
@@ -1989,7 +1992,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="projects-GETapi-v1-projects--id-">Показать один проект.</h2>
+                    <h2 id="projects-GETapi-v1-projects--id-">Show a single project.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -2036,11 +2039,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 17,
+        &quot;id&quot;: 27,
         &quot;name&quot;: &quot;Self-enabling attitude-oriented orchestration&quot;,
         &quot;description&quot;: &quot;Incidunt iure odit et et modi ipsum. Omnis autem et consequatur.&quot;,
-        &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+        &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
     }
 }</code>
  </pre>
@@ -2143,7 +2146,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="projects-PUTapi-v1-projects--id-">Обновить проект.</h2>
+                    <h2 id="projects-PUTapi-v1-projects--id-">Update a project.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -2200,11 +2203,11 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 18,
+        &quot;id&quot;: 28,
         &quot;name&quot;: &quot;Inverse neutral productivity&quot;,
         &quot;description&quot;: null,
-        &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+        &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
     }
 }</code>
  </pre>
@@ -2336,7 +2339,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="projects-DELETEapi-v1-projects--id-">Удалить проект (вместе с задачами — каскадом из миграции).</h2>
+                    <h2 id="projects-DELETEapi-v1-projects--id-">Delete a project (its tasks are removed via the migration&#039;s cascade).</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -2485,15 +2488,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     
 
-                                <h2 id="system-GETapi-v1-stats">Сводка по данным пользователя (кешируется на 60 секунд).</h2>
+                                <h2 id="system-GETapi-v1-stats">Per-user counts.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
 </p>
 
-<p>Результат кешируется на 60 секунд (Cache::remember): первый запрос
-считает агрегаты, последующие в течение TTL берут готовое из кеша.
-Допускается небольшая неактуальность данных — обычный приём для дашбордов.</p>
+<p>Cached for 60s: the aggregates are slightly stale within the TTL, which is
+an acceptable trade-off for dashboard-style numbers.</p>
 
 <span id="example-requests-GETapi-v1-stats">
 <blockquote>Example request:</blockquote>
@@ -2631,15 +2633,15 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
                 <h1 id="tasks">Tasks</h1>
 
-    <p>Задачи внутри проектов.</p>
+    <p>Tasks that belong to a project.</p>
 
-                                <h2 id="tasks-GETapi-v1-projects--project_id--tasks">Список задач конкретного проекта.</h2>
+                                <h2 id="tasks-GETapi-v1-projects--project_id--tasks">List the tasks of a project (paginated).</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
 </p>
 
-<p>$project приходит из вложенного маршрута projects/{project}/tasks.</p>
+
 
 <span id="example-requests-GETapi-v1-projects--project_id--tasks">
 <blockquote>Example request:</blockquote>
@@ -2701,24 +2703,24 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 21,
-            &quot;project_id&quot;: 19,
+            &quot;id&quot;: 26,
+            &quot;project_id&quot;: 29,
             &quot;title&quot;: &quot;Animi quos velit.&quot;,
             &quot;description&quot;: &quot;Nihil accusantium harum mollitia modi deserunt. Ab provident perspiciatis quo omnis nostrum aut adipisci. Nostrum qui commodi incidunt iure.&quot;,
             &quot;status&quot;: &quot;done&quot;,
             &quot;due_date&quot;: &quot;2026-06-25&quot;,
-            &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+            &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
         },
         {
-            &quot;id&quot;: 22,
-            &quot;project_id&quot;: 20,
+            &quot;id&quot;: 27,
+            &quot;project_id&quot;: 30,
             &quot;title&quot;: &quot;Praesentium quis adipisci molestias.&quot;,
             &quot;description&quot;: &quot;Eum doloremque id aut libero aliquam veniam corporis. Mollitia deleniti nemo odit quia officia. Dignissimos neque blanditiis odio. Excepturi doloribus delectus fugit qui repudiandae laboriosam. Alias tenetur ratione nemo voluptate accusamus ut et.&quot;,
             &quot;status&quot;: &quot;in_progress&quot;,
             &quot;due_date&quot;: &quot;2026-06-29&quot;,
-            &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+            &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
         }
     ],
     &quot;links&quot;: {
@@ -2866,7 +2868,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="todo"
                data-component="query">
     <br>
-<p>Фильтр по статусу: todo, in_progress, done. Example: <code>todo</code></p>
+<p>Filter by status: todo, in_progress, done. Example: <code>todo</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
@@ -2878,7 +2880,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="deploy"
                data-component="query">
     <br>
-<p>Поиск по названию. Example: <code>deploy</code></p>
+<p>Filter by title. Example: <code>deploy</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>sort</code></b>&nbsp;&nbsp;
@@ -2890,7 +2892,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="-due_date"
                data-component="query">
     <br>
-<p>Поля: created_at, due_date, title, status (префикс - для убывания). Example: <code>-due_date</code></p>
+<p>created_at, due_date, title, status (prefix with - for descending). Example: <code>-due_date</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -2933,7 +2935,7 @@ Must be one of:
         </div>
         </form>
 
-                    <h2 id="tasks-POSTapi-v1-projects--project_id--tasks">Создать задачу внутри проекта.</h2>
+                    <h2 id="tasks-POSTapi-v1-projects--project_id--tasks">Create a task inside a project.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -2954,8 +2956,8 @@ Must be one of:
     --data "{
     \"title\": \"b\",
     \"description\": \"Et animi quos velit et fugiat.\",
-    \"status\": \"done\",
-    \"due_date\": \"2026-06-06T20:34:46\"
+    \"status\": \"todo\",
+    \"due_date\": \"2026-06-06T21:18:28\"
 }"
 </code></pre></div>
 
@@ -2974,8 +2976,8 @@ const headers = {
 let body = {
     "title": "b",
     "description": "Et animi quos velit et fugiat.",
-    "status": "done",
-    "due_date": "2026-06-06T20:34:46"
+    "status": "todo",
+    "due_date": "2026-06-06T21:18:28"
 };
 
 fetch(url, {
@@ -2994,14 +2996,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 23,
-        &quot;project_id&quot;: 21,
+        &quot;id&quot;: 28,
+        &quot;project_id&quot;: 31,
         &quot;title&quot;: &quot;Nihil accusantium harum mollitia.&quot;,
         &quot;description&quot;: null,
         &quot;status&quot;: &quot;todo&quot;,
         &quot;due_date&quot;: &quot;2026-06-26&quot;,
-        &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+        &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
     }
 }</code>
  </pre>
@@ -3134,10 +3136,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-v1-projects--project_id--tasks"
-               value="done"
+               value="todo"
                data-component="body">
     <br>
-<p>Example: <code>done</code></p>
+<p>Example: <code>todo</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>todo</code></li> <li><code>in_progress</code></li> <li><code>done</code></li></ul>
         </div>
@@ -3148,14 +3150,14 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="due_date"                data-endpoint="POSTapi-v1-projects--project_id--tasks"
-               value="2026-06-06T20:34:46"
+               value="2026-06-06T21:18:28"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-06T20:34:46</code></p>
+<p>Must be a valid date. Example: <code>2026-06-06T21:18:28</code></p>
         </div>
         </form>
 
-                    <h2 id="tasks-GETapi-v1-tasks--id-">Показать одну задачу (shallow-маршрут tasks/{task}).</h2>
+                    <h2 id="tasks-GETapi-v1-tasks--id-">Show a single task.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3202,14 +3204,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 24,
-        &quot;project_id&quot;: 22,
+        &quot;id&quot;: 29,
+        &quot;project_id&quot;: 32,
         &quot;title&quot;: &quot;Adipisci quidem nostrum qui commodi.&quot;,
         &quot;description&quot;: &quot;Et et modi ipsum nostrum. Autem et consequatur aut dolores enim non facere tempora.&quot;,
         &quot;status&quot;: &quot;in_progress&quot;,
         &quot;due_date&quot;: null,
-        &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+        &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
     }
 }</code>
  </pre>
@@ -3312,7 +3314,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="tasks-PUTapi-v1-tasks--id-">Обновить задачу.</h2>
+                    <h2 id="tasks-PUTapi-v1-tasks--id-">Update a task.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3334,7 +3336,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"title\": \"b\",
     \"description\": \"Et animi quos velit et fugiat.\",
     \"status\": \"done\",
-    \"due_date\": \"2026-06-06T20:34:46\"
+    \"due_date\": \"2026-06-06T21:18:28\"
 }"
 </code></pre></div>
 
@@ -3354,7 +3356,7 @@ let body = {
     "title": "b",
     "description": "Et animi quos velit et fugiat.",
     "status": "done",
-    "due_date": "2026-06-06T20:34:46"
+    "due_date": "2026-06-06T21:18:28"
 };
 
 fetch(url, {
@@ -3373,14 +3375,14 @@ fetch(url, {
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;data&quot;: {
-        &quot;id&quot;: 25,
-        &quot;project_id&quot;: 23,
+        &quot;id&quot;: 30,
+        &quot;project_id&quot;: 33,
         &quot;title&quot;: &quot;Nihil accusantium harum mollitia.&quot;,
         &quot;description&quot;: null,
         &quot;status&quot;: &quot;todo&quot;,
         &quot;due_date&quot;: &quot;2026-06-26&quot;,
-        &quot;created_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2026-06-06T20:34:46.000000Z&quot;
+        &quot;created_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2026-06-06T21:18:28.000000Z&quot;
     }
 }</code>
  </pre>
@@ -3531,14 +3533,14 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="due_date"                data-endpoint="PUTapi-v1-tasks--id-"
-               value="2026-06-06T20:34:46"
+               value="2026-06-06T21:18:28"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-06T20:34:46</code></p>
+<p>Must be a valid date. Example: <code>2026-06-06T21:18:28</code></p>
         </div>
         </form>
 
-                    <h2 id="tasks-DELETEapi-v1-tasks--id-">Удалить задачу.</h2>
+                    <h2 id="tasks-DELETEapi-v1-tasks--id-">Delete a task.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>

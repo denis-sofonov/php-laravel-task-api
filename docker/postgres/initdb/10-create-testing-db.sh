@@ -1,6 +1,6 @@
 #!/bin/bash
-# Выполняется автоматически при первой инициализации контейнера Postgres.
-# Создаёт отдельную базу для тестов, чтобы прогон тестов не трогал dev-данные.
+# Runs automatically on first initialization of the Postgres container.
+# Creates a separate database for tests so the test run never touches dev data.
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
