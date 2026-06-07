@@ -9,3 +9,7 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+# Keep generated Scribe API docs out of GitHub's language statistics.
+public/docs/** linguist-generated
+.scribe/** linguist-generated
