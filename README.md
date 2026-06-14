@@ -11,6 +11,8 @@ validation, tests, static analysis, Docker and CI.
 > generic boilerplate — the goal is to demonstrate engineering decisions, not to
 > be a fill-in-the-blanks starter. See [Design decisions](#design-decisions--trade-offs).
 
+The same domain is implemented across stacks: [`python-fastapi-task-api`](https://github.com/denis-sofonov/python-fastapi-task-api) (FastAPI) and the full-stack [`ts-nuxt-task-app`](https://github.com/denis-sofonov/ts-nuxt-task-app) (Nuxt) and [`ts-next-task-app`](https://github.com/denis-sofonov/ts-next-task-app) (Next.js).
+
 ## Tech stack
 
 | Area | Choice |
